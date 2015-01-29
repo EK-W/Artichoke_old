@@ -3,15 +3,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 
 import objects.ObjectRegistry;
-import objects.sections.ConnectionPoint;
+import objects.sections.BodyPoint;
 
 
 public class MouseHandler implements MouseListener, MouseMotionListener{
 
-	public static ConnectionPoint selected;
+	public static BodyPoint selected;
 	public static Point2D mouseLoc = new Point2D.Double(0,0);
 	public static boolean mouseDown = false;
 	
@@ -27,10 +26,6 @@ public class MouseHandler implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mouseLoc = e.getPoint();
-//		if(mouseDown){
-//			ObjectRegistry.update();
-//		}
-		
 	}
 
 	@Override
@@ -55,14 +50,12 @@ public class MouseHandler implements MouseListener, MouseMotionListener{
 		mouseDown=true;
 		selected=null;
 		ObjectRegistry.checkMouseClick();
-		
-		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		mouseDown=false;
-		
+		selected=null;
 	}
 
 }

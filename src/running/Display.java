@@ -8,8 +8,10 @@ import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -26,15 +28,14 @@ import objects.sections.ConnectionPoint;
 public class Display extends JFrame implements ActionListener{
 	
 	public static Dimension screen = new Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize());
-	static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
+	public static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 	public static Dimension relative;
 	public Timer animate = new Timer(50,this);
 	public static MouseHandler mouseHandler = new MouseHandler();
-	public static int showSelectables=122;
-	
-	public static void main(String[] args){
-		Display d = new Display();
-	}
+	public static KeyHandler keyHandler = new KeyHandler();
+	public static int showSelectables=150;
+	public static boolean screenshot = false;
+	public static int currentSlide = 1;
 	
 	public Display(){
 		this.setBackground(new Color(204,204,204));
@@ -46,8 +47,10 @@ public class Display extends JFrame implements ActionListener{
 		this.setVisible(true);
 		this.addMouseListener(mouseHandler);
 		this.addMouseMotionListener(mouseHandler);
+		this.addKeyListener(keyHandler);
 		relative = new Dimension(screen.width/1280,screen.height/800);
 		ObjectCreator.createPerson();
+		ObjectCreator.createRope();
 		animate.start();
 	}
 	
@@ -58,12 +61,17 @@ public class Display extends JFrame implements ActionListener{
 		g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC));
 		g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));
 		g.setColor(Color.black);
-		g.drawString(String.valueOf(MouseHandler.mouseLoc.getX()), 5, 25);
-		g.drawString(String.valueOf(MouseHandler.mouseLoc.getY()), 5, 45);
-		g.drawString(String.valueOf(MouseHandler.mouseDown), 5, 65);
-		g.drawString(String.valueOf(MouseHandler.selected==null), 5, 85);
+		if(!screenshot){
+			g.drawString(String.valueOf(MouseHandler.mouseLoc.getX()), 5, 25);
+			g.drawString(String.valueOf(MouseHandler.mouseLoc.getY()), 5, 45);
+			g.drawString(String.valueOf(currentSlide),5,65);
+		}
 		ObjectRegistry.paint(g2);
 		
+	}
+	
+	public void saveScreen(){
+		ImageHandler.saveScreen();
 	}
 
 	@Override

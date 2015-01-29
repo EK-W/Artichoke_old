@@ -16,7 +16,7 @@ public class AngledLine{
 	
 	Point2D base;
 	Point2D end;
-	double deltaAngle;
+	double deltaAngle = 0;
 	
 	//Angle methods
 	private double angle;

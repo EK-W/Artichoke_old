@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class BodyPoint {
 	public int index;
+	public int depth;
 	private static int indexCounter = 0;
 	protected static final float radius = 7.5f;
 	protected static final float outlineSize = 1.5f;
@@ -18,6 +19,13 @@ public class BodyPoint {
 	public BodyPoint(){
 		index = indexCounter;
 		indexCounter++;
+	}
+	public void indexDepth(int d){
+		depth = d;
+		if(children!=null)
+		for(int i=0;i<children.size();i++){
+			children.get(i).child.indexDepth(d+1);
+		}
 	}
 	public int getIndex() {
 		return index;
@@ -46,5 +54,8 @@ public class BodyPoint {
 				children.get(i).child.paintSelectables(g);
 			}
 		}
+	}
+	public void updateAsSelected() {
+		
 	}
 }
