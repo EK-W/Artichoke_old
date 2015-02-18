@@ -1,8 +1,10 @@
 package objects;
 
+import java.io.Serializable;
+
 import objects.sections.ConnectionPoint;
 
-public class DoubleBodyPoint {
+public class DoubleBodyPoint implements Serializable{
 	public ConnectionPoint left;
 	public ConnectionPoint right;
 	

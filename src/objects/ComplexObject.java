@@ -1,15 +1,14 @@
 package objects;
 
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
-import objects.sections.BodyPoint;
 import objects.sections.ConnectionBase;
 import objects.sections.ConnectionLine;
-import objects.sections.ConnectionPoint;
 import running.Display;
 import running.MouseHandler;
 
-public class ComplexObject {
+public class ComplexObject implements Serializable{
 	public ConnectionLine[] connectionLines;
 	ConnectionBase objectBase;
 	

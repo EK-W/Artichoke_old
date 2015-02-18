@@ -1,9 +1,11 @@
 package objects;
 
+import java.io.Serializable;
+
 import objects.sections.BodyPoint;
 import objects.sections.ConnectionLine;
 
-public class DoubleBodyLine {
+public class DoubleBodyLine implements Serializable{
 	public ConnectionLine left;
 	public ConnectionLine right;
 	

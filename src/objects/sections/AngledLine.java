@@ -1,9 +1,11 @@
 package objects.sections;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 
 
-public class AngledLine{
+
+public class AngledLine implements Serializable{
 	
 	
 	public AngledLine(Point2D location, double angle, double length){

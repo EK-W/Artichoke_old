@@ -3,12 +3,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.io.Serializable;
 
 import running.Display;
 import running.MouseHandler;
 
 
-public class ConnectionPoint extends BodyPoint{	
+public class ConnectionPoint extends BodyPoint implements Serializable{	
 	private boolean isSelectable;
 	public ConnectionPoint(){
 		super();

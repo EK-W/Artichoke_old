@@ -3,13 +3,16 @@ package objects.sections;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ConnectionLine {
+
+public class ConnectionLine implements Serializable{
 	public AngledLine line;
 	private BodyPoint parent;
 	public ConnectionPoint child;
-	private BasicStroke stroke;
+	private float thickness;
+	private boolean round;
 	private Color color;
 	public ConnectionLine(BodyPoint b,float length,double angle){
 		parent = b;
@@ -17,7 +20,7 @@ public class ConnectionLine {
 		parent.children.add(this);
 		line = new AngledLine(parent.location, angle, length);
 		color = Color.black;
-		stroke = new BasicStroke(4);
+		thickness = 4;
 	}
 	public ConnectionLine(BodyPoint p, ConnectionPoint c,float length,double angle){
 		parent = p;
@@ -29,14 +32,12 @@ public class ConnectionLine {
 		child.parentLine=this;
 		
 		color = Color.black;
-		stroke = new BasicStroke(4);
+		thickness = 4;
+		round = true;
 	}
 	public ConnectionLine paintType(Color c, float t, boolean r){
-		if(r){
-			stroke = new BasicStroke(t,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND);
-		}else{
-			stroke = new BasicStroke(t);
-		}
+		thickness = t;
+		round = r;
 		color = c;
 		
 		return this;
@@ -58,7 +59,10 @@ public class ConnectionLine {
 	}
 	public void paintLine(Graphics2D g){
 		g.setColor(color);
-		g.setStroke(stroke);
+		if(round)
+			g.setStroke(new BasicStroke(thickness,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+		else
+			g.setStroke(new BasicStroke(thickness));
 		g.draw(line.shape());
 	}
 	

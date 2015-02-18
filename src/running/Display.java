@@ -72,6 +72,8 @@ public class Display extends JFrame implements ActionListener{
 	
 	public void saveScreen(){
 		ImageHandler.saveScreen();
+		ObjectRegistry.serialize();
+		currentSlide++;
 	}
 
 	@Override

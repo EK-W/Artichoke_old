@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 
 import running.MouseHandler;
 
-public class ConnectionBase extends BodyPoint{
+public class ConnectionBase extends BodyPoint implements Serializable{
 
 	public ConnectionBase(Point2D loc){
 		super();

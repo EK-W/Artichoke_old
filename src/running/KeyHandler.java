@@ -16,6 +16,9 @@ public class KeyHandler implements KeyListener{
 		if(e.getKeyCode()==KeyEvent.VK_SPACE){
 			Main.display.saveScreen();
 		}
+		if(e.getKeyCode()==KeyEvent.VK_S){
+			ImageHandler.saveToGif();
+		}
 		
 	}
 
