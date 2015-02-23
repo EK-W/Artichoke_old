@@ -9,7 +9,7 @@ import objects.sections.ConnectionPoint;
 
 public class ObjectCreator {
 	
-	public static void createPerson(){
+	public static ComplexObject createPerson(){
 		ConnectionBase waistPoint = new ConnectionBase(new Point2D.Double(640,500));
 		ConnectionPoint forehead = new ConnectionPoint().setUnselectable(true);
 		ConnectionPoint throat = new ConnectionPoint();
@@ -37,12 +37,11 @@ public class ObjectCreator {
 		DoubleBodyLine foot = new DoubleBodyLine(ankle,footPoint,25,-90);
 		
 		
-		ComplexObject person = new ComplexObject(waistPoint,torso,shoulder.left,shoulder.right,armTop.left,armTop.right,armBottom.left,
+		return new ComplexObject(waistPoint,torso,shoulder.left,shoulder.right,armTop.left,armTop.right,armBottom.left,
 				armBottom.right,legTop.left,legTop.right,legBottom.left,legBottom.right,foot.left,foot.right,neck,head);
-		ObjectRegistry.addObject(person);
 	}
 	
-	public static void createRope(){
+	public static ComplexObject createRope(){
 		ConnectionBase base = new ConnectionBase(new Point2D.Double(40,200));
 		ConnectionPoint p1 = new ConnectionPoint();
 		ConnectionPoint p2 = new ConnectionPoint();
@@ -55,7 +54,6 @@ public class ObjectCreator {
 		ConnectionLine s23 = new ConnectionLine(p2,p3,50,180);
 		ConnectionLine s34 = new ConnectionLine(p3,p4,50,180);
 		ConnectionLine s45 = new ConnectionLine(p4,p5,50,180);
-		ComplexObject rope = new ComplexObject(base,sb1,s12,s23,s34,s45);
-		ObjectRegistry.addObject(rope);
+		return new ComplexObject(base,sb1,s12,s23,s34,s45);
 	}
 }

@@ -8,6 +8,10 @@ import java.io.Serializable;
 public class AngledLine implements Serializable{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2373136852044526957L;
 	public AngledLine(Point2D location, double angle, double length){
 		this.length=length;
 		base = location;

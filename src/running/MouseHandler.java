@@ -4,7 +4,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
-import objects.ObjectRegistry;
 import objects.sections.BodyPoint;
 
 
@@ -49,7 +48,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener{
 	public void mousePressed(MouseEvent e) {
 		mouseDown=true;
 		selected=null;
-		ObjectRegistry.checkMouseClick();
+		Main.project.slides.get(Main.project.slideNumber).checkMouseClick();
 	}
 
 	@Override

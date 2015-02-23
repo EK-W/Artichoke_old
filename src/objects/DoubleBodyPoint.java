@@ -5,6 +5,10 @@ import java.io.Serializable;
 import objects.sections.ConnectionPoint;
 
 public class DoubleBodyPoint implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2427070170768951412L;
 	public ConnectionPoint left;
 	public ConnectionPoint right;
 	

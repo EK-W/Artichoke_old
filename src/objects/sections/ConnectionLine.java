@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 
 public class ConnectionLine implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8262450872036022908L;
 	public AngledLine line;
 	private BodyPoint parent;
 	public ConnectionPoint child;

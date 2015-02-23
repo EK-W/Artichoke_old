@@ -6,6 +6,10 @@ import objects.sections.BodyPoint;
 import objects.sections.ConnectionLine;
 
 public class DoubleBodyLine implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2727820776727512502L;
 	public ConnectionLine left;
 	public ConnectionLine right;
 	

@@ -3,12 +3,16 @@ package objects;
 import java.awt.Graphics2D;
 import java.io.Serializable;
 
+import display.Display;
 import objects.sections.ConnectionBase;
 import objects.sections.ConnectionLine;
-import running.Display;
 import running.MouseHandler;
 
 public class ComplexObject implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6305042325566561099L;
 	public ConnectionLine[] connectionLines;
 	ConnectionBase objectBase;
 	
@@ -17,6 +21,19 @@ public class ComplexObject implements Serializable{
 		connectionLines = lines;
 		indexDepth();
 	}
+//	private ComplexObject(ConnectionBase base){
+//		objectBase = base;
+//	}
+	
+//	public ComplexObject clone(){
+//		ComplexObject ret = new ComplexObject(objectBase.clone());
+//		ret.connectionLines = new ConnectionLine[connectionLines.length];
+//		for(int i=0;i<connectionLines.length;i++){
+//			ret.connectionLines[i]=connectionLines[i].clone();
+//		}
+//		ret.indexDepth();
+//	}
+	
 	
 	private void indexDepth(){
 		objectBase.indexDepth(0);

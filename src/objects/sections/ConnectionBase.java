@@ -10,6 +10,11 @@ import running.MouseHandler;
 
 public class ConnectionBase extends BodyPoint implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3116583082329140948L;
+
 	public ConnectionBase(Point2D loc){
 		super();
 		location = loc;

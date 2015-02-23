@@ -9,6 +9,10 @@ import java.util.ArrayList;
 
 
 public class BodyPoint implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8476342901843240575L;
 	public int index;
 	public int depth;
 	private static int indexCounter = 0;
@@ -22,6 +26,14 @@ public class BodyPoint implements Serializable{
 		index = indexCounter;
 		indexCounter++;
 	}
+	
+//	public BodyPoint clone(){
+//		BodyPoint ret = new BodyPoint();
+//		ret.parentLine=parentLine.clone();
+//		ret.location=new Point2D.Double(location.getX(),location.getY());
+//		ret.children
+//	}
+	
 	public void indexDepth(int d){
 		depth = d;
 		if(children!=null)
