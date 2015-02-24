@@ -29,7 +29,6 @@ public class Display extends JFrame implements ActionListener{
 	public Timer animate = new Timer(50,this);
 
 	public static boolean screenshot = false;
-	//public static int currentSlide = 1;
 	
 	public Display(){
 		this.setBackground(new Color(204,204,204));
@@ -40,9 +39,6 @@ public class Display extends JFrame implements ActionListener{
 		device.setFullScreenWindow(this);
 		this.setVisible(true);
 		animate.start();
-		//Placeholders
-
-
 	}
 	
 	public void paint(Graphics g){

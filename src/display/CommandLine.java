@@ -1,8 +1,12 @@
 package display;
 
 import java.awt.event.KeyEvent;
+import java.util.Scanner;
 
+import objects.ObjectCreator;
+import objects.Slide;
 import running.Main;
+import running.Project;
 
 public class CommandLine {
 	public static boolean commandInputOpen = false;
@@ -38,17 +42,47 @@ public class CommandLine {
 		commandInputOpen=false;
 	}
 	private static void findCommands(){
+		Scanner s = new Scanner(command);
+		if(!s.hasNext())return;
+		String next = s.next();
 		if(command.equalsIgnoreCase("/save")){
 			Main.project.save();
 			return;
 		}
-		if(command.equalsIgnoreCase("/addSlide")){
-			Main.project.addNewSlide();
+		if(next.equalsIgnoreCase("/save")){
+			Main.project.save(s.nextInt());
 			return;
 		}
+		if(command.equalsIgnoreCase("/addSlide")){
+			Main.project.addNewSlide();
+			Main.project.setSlide(Main.project.slides.size()-1);
+			return;
+		}
+		if(next.equalsIgnoreCase("/deleteSlide")){
+			Main.project.slides.remove(s.nextInt());
+			return;
+		}
+		if(command.equalsIgnoreCase("/setPrevious")){
+			if(Main.project.slideNumber>0)
+			Main.project.slides.set(Main.project.slideNumber, Main.project.slides.get(Main.project.slideNumber-1).clone());
+			return;
+		}
+		if(next.equalsIgnoreCase("/load")){
+			Main.project=new Project(s.next());
+			if(Main.project.slides.size()==0){
+				Main.project.slides.add(new Slide());
+				Main.project.slides.get(Main.project.slideNumber).addObject(ObjectCreator.createPerson());
+			}
+			return;
+		}
+//		if(next.equalsIgnoreCase("/copy")){
+//			
+//			return;
+//		}
 		
 		
-		System.out.println(command + " does not match any of the commands available to execute.");
+		
+		System.out.println("\""+command + "\" does not match any of the commands available to execute.");
 	}
 
 }

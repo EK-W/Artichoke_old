@@ -37,4 +37,13 @@ public class ConnectionBase extends BodyPoint implements Serializable{
 			}
 		}	
 	}
+	@Override
+	public ConnectionBase clone(){
+//		System.out.print("1");
+		ConnectionBase ret = new ConnectionBase(new Point2D.Double(location.getX(),location.getY()));
+//		if(parentLine!=null)
+//			ret.parentLine=parentLine.clone();
+		ret.depth=depth;
+		return ret;
+	}
 }

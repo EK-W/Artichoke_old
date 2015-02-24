@@ -38,7 +38,7 @@ public class Slide implements Serializable{
 		Objects.add(e);
 	}
 	public Slide clone(){
-		Slide ret = null;
+	Slide ret = null;
 //		Slide ret = new Slide();
 //		for(int i=0;i<Objects.size();i++){
 //			ret.Objects.add(Objects.get(i).clone());

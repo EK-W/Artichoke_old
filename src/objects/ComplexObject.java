@@ -21,18 +21,19 @@ public class ComplexObject implements Serializable{
 		connectionLines = lines;
 		indexDepth();
 	}
-//	private ComplexObject(ConnectionBase base){
-//		objectBase = base;
-//	}
+	private ComplexObject(ConnectionBase base){
+		objectBase = base;
+	}
 	
-//	public ComplexObject clone(){
-//		ComplexObject ret = new ComplexObject(objectBase.clone());
-//		ret.connectionLines = new ConnectionLine[connectionLines.length];
-//		for(int i=0;i<connectionLines.length;i++){
-//			ret.connectionLines[i]=connectionLines[i].clone();
-//		}
-//		ret.indexDepth();
-//	}
+	public ComplexObject clone(){
+		ComplexObject ret = new ComplexObject(objectBase.clone());
+		ret.connectionLines = new ConnectionLine[connectionLines.length];
+		for(int i=0;i<connectionLines.length;i++){
+			ret.connectionLines[i]=connectionLines[i].clone();
+		}
+		//ret.indexDepth();
+		return ret;
+	}
 	
 	
 	private void indexDepth(){

@@ -19,7 +19,7 @@ public class KeyHandler implements KeyListener{
 			CommandLine.sendChar('/');
 		}
 		if(e.getKeyCode()==KeyEvent.VK_LEFT||e.getKeyCode()==KeyEvent.VK_RIGHT){
-			Main.project.setSituation(e.getKeyCode());
+			Main.project.changeSlide(e.getKeyCode()==KeyEvent.VK_RIGHT);
 		}
 		
 	}

@@ -70,4 +70,10 @@ public class ConnectionLine implements Serializable{
 		g.draw(line.shape());
 	}
 	
+	public ConnectionLine clone(){
+		Color c = new Color(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+		ConnectionLine ret = new ConnectionLine(parent.clone(),child,(float)line.getLength(),line.getAngle()).paintType(c, thickness, round);
+		return ret;
+	}
+	
 }

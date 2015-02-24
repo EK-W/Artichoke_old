@@ -13,9 +13,9 @@ public class BodyPoint implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -8476342901843240575L;
-	public int index;
+//	public int index;
 	public int depth;
-	private static int indexCounter = 0;
+//	private static int indexCounter = 0;
 	protected static final float radius = 7.5f;
 	protected static final float outlineSize = 1.5f;
 	protected ConnectionLine parentLine;
@@ -23,16 +23,23 @@ public class BodyPoint implements Serializable{
 	public ArrayList<ConnectionLine> children;
 	
 	public BodyPoint(){
-		index = indexCounter;
-		indexCounter++;
+//		index = indexCounter;
+//		indexCounter++;
 	}
 	
-//	public BodyPoint clone(){
-//		BodyPoint ret = new BodyPoint();
-//		ret.parentLine=parentLine.clone();
-//		ret.location=new Point2D.Double(location.getX(),location.getY());
-//		ret.children
-//	}
+	public BodyPoint clone(){
+//		System.out.print("1");
+		BodyPoint ret = new BodyPoint();
+		if(parentLine!=null)
+		ret.parentLine=parentLine.clone();
+		ret.location=new Point2D.Double(location.getX(),location.getY());
+//		ret.children = new ArrayList<ConnectionLine>();
+//		for(int i=0;i<children.size();i++){
+//			ret.children.add(children.get(i).clone());
+//		}
+		ret.depth=depth;
+		return ret;
+	}
 	
 	public void indexDepth(int d){
 		depth = d;
@@ -41,9 +48,9 @@ public class BodyPoint implements Serializable{
 			children.get(i).child.indexDepth(d+1);
 		}
 	}
-	public int getIndex() {
-		return index;
-	}
+//	public int getIndex() {
+//		return index;
+//	}
 	
 	public void showPoint(Graphics2D g){
 		g.setColor(Color.black);

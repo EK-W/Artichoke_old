@@ -13,7 +13,7 @@ public class Main {
 	public static KeyHandler keyHandler = new KeyHandler();
 	
 	
-	public static void main(String[] args){
+	public static void main(String[] args){ 
 		File folder = new File("projects/");
 		if (!folder.exists()){
 			folder.mkdir();
@@ -25,10 +25,10 @@ public class Main {
 		display.addMouseListener(mouseHandler);
 		display.addMouseMotionListener(mouseHandler);
 		display.addKeyListener(keyHandler);
+		//Placeholders	
 		if(Main.project.slides.size()==0){
 			Main.project.slides.add(new Slide());
 			Main.project.slides.get(Main.project.slideNumber).addObject(ObjectCreator.createPerson());
-			
 		}
 	}
 }

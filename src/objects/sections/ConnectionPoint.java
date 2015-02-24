@@ -18,6 +18,13 @@ public class ConnectionPoint extends BodyPoint implements Serializable{
 		super();
 		isSelectable=true;
 	}
+	
+	@Override
+	public ConnectionPoint clone(){
+		ConnectionPoint ret = (ConnectionPoint) super.clone();
+		ret.isSelectable = isSelectable;
+		return ret;
+	}
 	public ConnectionPoint setUnselectable(boolean unselectable){
 		isSelectable=!unselectable;
 		return this;

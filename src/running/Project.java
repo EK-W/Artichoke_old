@@ -3,7 +3,6 @@ package running;
 import gifWriting.GifSequenceWriter;
 
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,27 +37,43 @@ public class Project implements Serializable{
 		}
 	}
 	
-	public void setSituation(int KeyPressed){
+	public void changeSlide(boolean increase){
 		if(slides.size()<2){
 			return;
 		}
-		if(KeyPressed==KeyEvent.VK_LEFT && slideNumber>0){
+		if(!increase && slideNumber>0){
 			slideNumber--;
 		}
-		if(KeyPressed==KeyEvent.VK_RIGHT && slideNumber<slides.size()-1){
+		if(increase && slideNumber<slides.size()-1){
 			slideNumber++;
 		}
 	}
+	public void setSlide(int newNum){
+		if(slides.size()<2){
+			return;
+		}
+		if(newNum>-1){
+			slideNumber=newNum;
+		}
+		if(newNum<slides.size()){
+			slideNumber=newNum;
+		}
+	}
 	
-	public void save(){		
+	public void save(){
+		this.save(100);
+	}
+	
+	public void save(int gifSpeed){		
 		Display.screenshot=true;
 		BufferedImage toAdd = new BufferedImage(Display.screen.width,Display.screen.height,BufferedImage.TYPE_INT_RGB);
 		int prevSlideNumber=slideNumber;
 		GifSequenceWriter writer = null;
 		ImageOutputStream output;
+		new File("projects/"+projectName+"/"+projectName+".gif").delete();
 		try {
 		output = new FileImageOutputStream(new File("projects/"+projectName+"/"+projectName+".gif"));
-		writer = new GifSequenceWriter(output, BufferedImage.TYPE_INT_RGB, 100, true);
+		writer = new GifSequenceWriter(output, BufferedImage.TYPE_INT_RGB, gifSpeed, true);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
