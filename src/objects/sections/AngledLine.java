@@ -12,9 +12,9 @@ public class AngledLine implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -2373136852044526957L;
-	public AngledLine(Point2D location, double angle, double length){
+	public AngledLine( double angle, double length){
 		this.length=length;
-		base = location;
+		base = new Point2D.Double(100,100);
 		end = new Point2D.Double();
 		this.setAngle(angle);
 		
@@ -22,7 +22,22 @@ public class AngledLine implements Serializable{
 	
 	Point2D base;
 	Point2D end;
-	double deltaAngle = 0;
+	
+	public Point2D getBase(){
+		return base;
+	}
+	public Point2D getEnd(){
+		return end;
+	}
+	
+	public void setBase(Point2D to){
+		base = to;
+		update();
+	}
+	public void setEnd(Point2D to){
+		end = to;
+		update();
+	}
 	
 	//Angle methods
 	private double angle;
@@ -30,9 +45,8 @@ public class AngledLine implements Serializable{
 		return angle;
 	}
 	
-	public void update(double da){
-		changeAngle(da);
-		//end.setLocation(base.getX()+(Math.cos(Math.toRadians(angle-90))*length),base.getY()+(Math.sin(Math.toRadians(angle-90))*length));
+	public void update(){
+		end.setLocation(base.getX()+(Math.cos(Math.toRadians(angle-90))*length),base.getY()+(Math.sin(Math.toRadians(angle-90))*length));
 	}
 	public void setAngle(double degrees){
 		angle = degrees;
@@ -62,9 +76,7 @@ public class AngledLine implements Serializable{
 	}
 	
 	public void pointAt(Point2D at){
-		double previousAngle = angle;
 		setAngle(Math.toDegrees(Math.atan2(at.getY()-base.getY(), at.getX()-base.getX()))+90);
-		deltaAngle = angle-previousAngle;
 	}
 	
 	

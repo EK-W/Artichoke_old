@@ -3,7 +3,6 @@ package display;
 import java.awt.event.KeyEvent;
 import java.util.Scanner;
 
-import objects.ObjectCreator;
 import objects.Slide;
 import running.Main;
 import running.Project;
@@ -71,7 +70,7 @@ public class CommandLine {
 			Main.project=new Project(s.next());
 			if(Main.project.slides.size()==0){
 				Main.project.slides.add(new Slide());
-				Main.project.slides.get(Main.project.slideNumber).addObject(ObjectCreator.createPerson());
+			//	Main.project.slides.get(Main.project.slideNumber).addObject(ObjectCreator.createPerson());
 			}
 			return;
 		}

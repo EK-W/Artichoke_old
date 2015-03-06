@@ -16,7 +16,7 @@ public class Slide implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7136195893435459941L;
-	private ArrayList<ComplexObject> Objects = new ArrayList<ComplexObject>();
+	public ArrayList<ComplexObject> Objects = new ArrayList<ComplexObject>();
 	
 	
 	public void paint(Graphics2D g){
@@ -38,27 +38,26 @@ public class Slide implements Serializable{
 		Objects.add(e);
 	}
 	public Slide clone(){
-	Slide ret = null;
-//		Slide ret = new Slide();
-//		for(int i=0;i<Objects.size();i++){
-//			ret.Objects.add(Objects.get(i).clone());
-//		}
-//		return ret;
-		
-		try {
-			FileOutputStream fileOut = new FileOutputStream("projects/"+Main.project.projectName+"/temp.txt");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(this);
-			out.close();
-			fileOut.close();
-			FileInputStream fileIn = new FileInputStream("projects/"+Main.project.projectName+"/temp.txt");
-	        ObjectInputStream in = new ObjectInputStream(fileIn);
-	        ret = (Slide) in.readObject();
-	        in.close();
-	        fileIn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		//Slide ret = null;
+		Slide ret = new Slide();
+		for(int i=0;i<Objects.size();i++){
+			ret.Objects.add(Objects.get(i).clone());
 		}
+		
+//		try {
+//			FileOutputStream fileOut = new FileOutputStream("projects/"+Main.project.projectName+"/temp.txt");
+//			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+//			out.writeObject(this);
+//			out.close();
+//			fileOut.close();
+//			FileInputStream fileIn = new FileInputStream("projects/"+Main.project.projectName+"/temp.txt");
+//	        ObjectInputStream in = new ObjectInputStream(fileIn);
+//	        ret = (Slide) in.readObject();
+//	        in.close();
+//	        fileIn.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		return ret;
 	}
 	

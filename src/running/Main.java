@@ -29,6 +29,8 @@ public class Main {
 		if(Main.project.slides.size()==0){
 			Main.project.slides.add(new Slide());
 			Main.project.slides.get(Main.project.slideNumber).addObject(ObjectCreator.createPerson());
+			//Clone test:
+			//Main.project.slides.get(Main.project.slideNumber).addObject(Main.project.slides.get(Main.project.slideNumber).Objects.get(0).clone());
 		}
 	}
 }

@@ -4,7 +4,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
-import objects.sections.BodyPoint;
+import objects.sections.points.BodyPoint;
 
 
 public class MouseHandler implements MouseListener, MouseMotionListener{
