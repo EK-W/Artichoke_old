@@ -1,19 +1,19 @@
-package objects;
+package objects.types.boundObject;
 
 import java.awt.Graphics2D;
 import java.io.Serializable;
 
 import display.Display;
-import objects.sections.points.ConnectionBase;
+import objects.types.ObjectBase;
 
-public class ComplexObject implements Serializable{
+public class BoundObject extends ObjectBase implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6305042325566561099L;
 	ConnectionBase objectBase;
 	
-	public ComplexObject(ConnectionBase base){
+	public BoundObject(ConnectionBase base){
 		objectBase = base;
 	}
 	
@@ -21,11 +21,11 @@ public class ComplexObject implements Serializable{
 		objectBase.paintLines(g);
 		if(!Display.screenshot)objectBase.paintPoints(g);
 	}
-	public ComplexObject clone(){
-		return new ComplexObject(objectBase.clone());
+	public BoundObject clone(){
+		return new BoundObject(objectBase.clone());
 	}
 	public void checkMouseClick() {
-		objectBase.checkIfSelected(0);
+		objectBase.checkIfSelected();
 	}
 
 }

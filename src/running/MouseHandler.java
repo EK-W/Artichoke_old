@@ -4,12 +4,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
-import objects.sections.points.BodyPoint;
+import objects.types.PointBase;
+import objects.types.boundObject.BodyPoint;
 
 
 public class MouseHandler implements MouseListener, MouseMotionListener{
 
-	public static BodyPoint selected;
+	public static PointBase selected;
 	public static Point2D mouseLoc = new Point2D.Double(0,0);
 	public static boolean mouseDown = false;
 	

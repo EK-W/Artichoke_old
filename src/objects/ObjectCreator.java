@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
-import objects.sections.DoubleBodyPoint;
-import objects.sections.points.ConnectionBase;
-import objects.sections.points.ConnectionPoint;
+import objects.types.boundObject.BoundObject;
+import objects.types.boundObject.ConnectionBase;
+import objects.types.boundObject.ConnectionPoint;
+import objects.types.boundObject.DoubleBodyPoint;
 
 public class ObjectCreator {
 	
-	public static ComplexObject createPerson(){
+	public static BoundObject createPerson(){
 		ConnectionBase waist = new ConnectionBase(new Point2D.Double(640,400));
 		ConnectionPoint neckBottom = new ConnectionPoint(0,150);
 		DoubleBodyPoint leg = new DoubleBodyPoint(135,100);
@@ -29,7 +30,7 @@ public class ObjectCreator {
 		
 		waist.connectTo(leg);
 		waist.updateChildren();
-		return new ComplexObject(waist);
+		return new BoundObject(waist);
 	}
 	
 	

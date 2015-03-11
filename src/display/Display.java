@@ -71,6 +71,11 @@ public class Display extends JFrame implements ActionListener{
 			g2.drawString(String.valueOf(MouseHandler.mouseLoc.getX()), 5, 45);
 			g2.drawString(String.valueOf(MouseHandler.mouseLoc.getY()), 5, 65);
 			g2.drawString(String.valueOf(Main.project.slideNumber),5,85);
+			if(MouseHandler.selected==null){
+				g2.drawString("null", 5, 105);
+			}else{
+				g2.drawString(MouseHandler.selected.toString(), 5, 105);
+			}
 		}
 
 		Main.project.slides.get(Main.project.slideNumber).paint(g2);

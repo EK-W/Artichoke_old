@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import objects.types.ObjectBase;
+import objects.types.boundObject.BoundObject;
 import running.Main;
 import running.MouseHandler;
 
@@ -16,7 +18,7 @@ public class Slide implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7136195893435459941L;
-	public ArrayList<ComplexObject> Objects = new ArrayList<ComplexObject>();
+	public ArrayList<ObjectBase> Objects = new ArrayList<ObjectBase>();
 	
 	
 	public void paint(Graphics2D g){
@@ -34,7 +36,7 @@ public class Slide implements Serializable{
 			}
 		}
 	}
-	public void addObject(ComplexObject e){
+	public void addObject(ObjectBase e){
 		Objects.add(e);
 	}
 	public Slide clone(){

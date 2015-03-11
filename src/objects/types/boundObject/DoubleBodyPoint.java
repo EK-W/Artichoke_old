@@ -1,8 +1,6 @@
-package objects.sections;
+package objects.types.boundObject;
 
 import java.io.Serializable;
-
-import objects.sections.points.ConnectionPoint;
 
 public class DoubleBodyPoint implements Serializable{
 	/**

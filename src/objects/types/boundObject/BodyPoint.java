@@ -1,28 +1,22 @@
-package objects.sections.points;
+package objects.types.boundObject;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import objects.sections.DoubleBodyPoint;
+import objects.types.PointBase;
 import running.MouseHandler;
 
 
-public abstract class BodyPoint implements Serializable{
+public abstract class BodyPoint extends PointBase implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8476342901843240575L;
-	protected static final double POINT_RADIUS = 7.5;
-	protected static final float POINT_OUTLINE_THICKNESS = 1.5f;
+
 	protected static int selectedHighestDepth =0;
 	protected ArrayList<ConnectionPoint> childLines = new ArrayList<ConnectionPoint>();
-	protected Point2D loc;
+	//protected Point2D loc;
 
 	public BodyPoint connectTo(ConnectionPoint childPoint){
 		childLines.add(childPoint);
@@ -36,7 +30,13 @@ public abstract class BodyPoint implements Serializable{
 		childPoint.right.setChildAttributes(loc);
 		return this;
 	}
-	
+	@Override
+	public void paintPoints(Graphics2D g){
+		super.paintPoints(g);
+		for(int i=0;i<childLines.size();i++){
+			childLines.get(i).paintPoints(g);
+		}
+	}
 //	public BodyPoint clone(){
 //		//new bodyPoint created
 //		BodyPoint ret = new BodyPoint();
@@ -51,9 +51,12 @@ public abstract class BodyPoint implements Serializable{
 //		
 //	}
 	
-	public abstract void updateAsSelected();
-	
-	public void checkIfSelected(int depth){
+
+	public void checkIfSelected(){
+		selectedHighestDepth=-1;
+		checkIfSelected(0);
+	}
+	protected void checkIfSelected(int depth){
 		if(depth==0)selectedHighestDepth=-1;
 		if(intersects(MouseHandler.mouseLoc)&&depth>selectedHighestDepth){
 			selectedHighestDepth = depth;
@@ -63,9 +66,9 @@ public abstract class BodyPoint implements Serializable{
 			childLines.get(i).checkIfSelected(depth+1);
 		}
 	}
-	public boolean intersects(Point2D p){
-		return(Math.sqrt(Math.pow(loc.getX()-p.getX(),2)+Math.pow(loc.getY()-p.getY(),2))<POINT_RADIUS);
-	}
+//	public boolean intersects(Point2D p){
+//		return(Math.sqrt(Math.pow(loc.getX()-p.getX(),2)+Math.pow(loc.getY()-p.getY(),2))<DisplaySettings.POINT_RADIUS);
+//	}
 	
 	
 	

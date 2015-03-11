@@ -1,4 +1,4 @@
-package objects.sections.points;
+package objects.types.boundObject;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -6,8 +6,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
-import objects.sections.AngledLine;
 import display.DisplaySettings;
+import angledLine.AngledLine;
 import running.MouseHandler;
 
 
@@ -24,6 +24,7 @@ public class ConnectionPoint extends BodyPoint implements Serializable{
 	public ConnectionPoint(double angle, double length){
 		line = new AngledLine(angle,length);
 		loc = line.getEnd();
+		pointColor = new Color(50,100,255,175);
 	}
 	public ConnectionPoint setLineGraphics(float thickness, boolean rounded, Color color){
 		this.thickness=thickness;
@@ -55,16 +56,7 @@ public class ConnectionPoint extends BodyPoint implements Serializable{
 		}
 		
 	}
-	public void paintPoints(Graphics2D g){
-		g.setColor(new Color(50,100,255,175));
-		g.fill(new Ellipse2D.Double(loc.getX()-POINT_RADIUS,loc.getY()-POINT_RADIUS,POINT_RADIUS*2,POINT_RADIUS*2));
-		g.setColor(Color.black);
-		g.setStroke(new BasicStroke(POINT_OUTLINE_THICKNESS));
-		g.draw(new Ellipse2D.Double(loc.getX()-POINT_RADIUS,loc.getY()-POINT_RADIUS,POINT_RADIUS*2,POINT_RADIUS*2));
-		for(int i=0;i<childLines.size();i++){
-			childLines.get(i).paintPoints(g);
-		}
-	}
+	
 	@Override
 	public void updateAsSelected() {
 		double previousAngle = line.getAngle();

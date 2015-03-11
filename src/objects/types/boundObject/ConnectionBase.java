@@ -1,12 +1,9 @@
-package objects.sections.points;
+package objects.types.boundObject;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-
 import running.MouseHandler;
 
 public class ConnectionBase extends BodyPoint implements Serializable{
@@ -18,18 +15,10 @@ public class ConnectionBase extends BodyPoint implements Serializable{
 	
 	public ConnectionBase(Point2D l){
 		loc = l;
+		pointColor = new Color(255,0,0,150);
 	}
 	
-	public void paintPoints(Graphics2D g){
-		g.setColor(new Color(255,0,0,150));
-		g.fill(new Ellipse2D.Double(loc.getX()-POINT_RADIUS,loc.getY()-POINT_RADIUS,POINT_RADIUS*2,POINT_RADIUS*2));
-		g.setColor(Color.black);
-		g.setStroke(new BasicStroke(POINT_OUTLINE_THICKNESS));
-		g.draw(new Ellipse2D.Double(loc.getX()-POINT_RADIUS,loc.getY()-POINT_RADIUS,POINT_RADIUS*2,POINT_RADIUS*2));
-		for(int i=0;i<childLines.size();i++){
-			childLines.get(i).paintPoints(g);
-		}
-	}
+	
 
 	public void paintLines(Graphics2D g) {
 		for(int i=0;i<childLines.size();i++){
