@@ -1,4 +1,4 @@
-package node;
+package bodies;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,21 +19,21 @@ public class Node implements Selectable{
 	private static final Color loneColor = new Color(255, 207, 51);
 	private float lineThickness = 1;
 	private Color lineColor = new Color(0, 0, 0);
-	//The following two are public solely for the purpose of debugging
-	public Connection parentConnection = null;
-	public Connection childConnection = null;
+	private Connection parentConnection = null;
+	private Connection childConnection = null;
 	private AngledLine parentLine = null;
+
 	
 	public Node(Point2D location){
 		this.location = location;
 	}
-	public Node(Point2D location, Node parent){
+	protected Node(Point2D location, Node parent){
 		this.location = location;
-		setParent(parent);
+		parent.connect(this);
 		parentLine = new AngledLine(parent.location,location);
 	}
-	public Node(Node parent, double angle, double length){
-		setParent(parent);
+	protected Node(Node parent, double angle, double length){
+		parent.connect(this);
 		parentLine = new AngledLine(parent.location, angle, length);
 		location = parentLine.getEnd();
 	}
@@ -42,36 +42,34 @@ public class Node implements Selectable{
 		this.lineColor = lineColor;
 		return this;
 	}
-	private void setParent(Node parent){
-		if(parent.childConnection == null) parent.childConnection = new Connection();
-		parent.childConnection.add(this);
-		parentConnection = parent.childConnection;
+	public Connection getParent(){
+		return parentConnection;
 	}
-	
+	public Connection getChild(){
+		return childConnection;
+	}
+	protected void connect(Node to){
+		if(to.parentConnection != null){
+			to.parentConnection.remove(to);
+		}
+		if(this.childConnection == null){
+			this.childConnection = new Connection();
+		}
+		childConnection.add(to);
+		to.parentConnection = childConnection;
+	}
 	public Ellipse2D getEllipse(){
 		return new Ellipse2D.Double(location.getX() - RADIUS, location.getY() - RADIUS, RADIUS * 2, RADIUS * 2);
-	}
-	
-	public void paint(Graphics2D g){
-		paintNode(g);
-		paintLine(g);
-		
 	}
 	public void paintNode(Graphics2D g) {
 		g.setColor(getNodeColor());
 		g.fill(getEllipse());
-		if(childConnection != null){
-			childConnection.paintChildrenNodes(g);
-		}
 	}
 	public void paintLine(Graphics2D g) {
 		if(parentLine != null){
 			g.setColor(lineColor);
 			g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g.draw(parentLine.shape());
-		}
-		if(childConnection != null){
-			childConnection.paintChildrenLines(g);
 		}
 	}
 	

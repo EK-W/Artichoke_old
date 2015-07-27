@@ -1,4 +1,4 @@
-package node;
+package bodies;
 
 import java.awt.Graphics2D;
 import java.util.HashSet;
@@ -10,22 +10,15 @@ public class Connection {
 	protected void add(Node n){
 		childNodes.add(n);
 	}
+	public void remove(Node n){
+		childNodes.remove(n);
+	}
 //	protected Node getParent(){
 //		return parentNode;
 //	}
-	protected HashSet<Node> getChildren(){
-		return childNodes;
-	}
-	public void paintChildrenNodes(Graphics2D g) {
-		for(Node i: childNodes){
-			i.paintNode(g);
-		}
-	}
-	public void paintChildrenLines(Graphics2D g) {
-		for(Node i: childNodes){
-			i.paintLine(g);
-		}
-	}
+//	protected HashSet<Node> getChildren(){
+//		return childNodes;
+//	}
 	public boolean checkChildrenSelected() {
 		for(Node i: childNodes){
 			if(i.checkSelected()) return true;

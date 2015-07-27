@@ -12,7 +12,9 @@ import java.awt.geom.Point2D;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import node.Node;
+import bodies.Body;
+import bodies.BoundTree;
+import bodies.Node;
 
 public class Main extends JFrame implements ActionListener{
 
@@ -33,10 +35,10 @@ public class Main extends JFrame implements ActionListener{
 	InputHandler inputHandler = new InputHandler();
 	
 	//TEMPORARY
-			static Node temp = new Node(new Point2D.Double(640, 400));
-			static Node temp2 = new Node(temp, 135, 50);
-			static Node temp3a = new Node(temp2, 135, 50);
-			static Node temp3b = new Node(temp2, -135, 50);
+			static Body temp = new BoundTree(new Node(new Point2D.Double(screen.getWidth()/2, screen.getHeight()/2)));
+			static{
+				temp.add(180, 200, parent);
+			}
 	
 	static {
 		//Get Screen Setup:

@@ -1,4 +1,4 @@
-package node;
+package bodies;
 
 public interface Selectable {
 	public boolean checkSelected();

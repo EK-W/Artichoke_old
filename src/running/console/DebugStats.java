@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import node.Node;
+import bodies.Node;
 import running.InputHandler;
 import running.Main;
 
@@ -37,7 +37,7 @@ public class DebugStats {
 		Node temp = InputHandler.selected;
 		g.drawString("Selected: " + (temp == null?"null":InputHandler.selected.toString()), 50, yLoc);yLoc+=20;
 		
-		g.drawString("Selected children#: " + (temp == null || temp.childConnection == null? "null" : temp.childConnection.length()), 50, yLoc);yLoc+=20;
+		g.drawString("Selected children#: " + (temp == null || temp.getChild() == null? "null" : temp.getChild().length()), 50, yLoc);yLoc+=20;
 	}
 	private static void paintRuler(Graphics2D g){
 		for(int i=0;i<=Main.baseRes.height;i+=25){

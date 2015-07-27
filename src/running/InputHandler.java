@@ -7,8 +7,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
+import bodies.Node;
 import running.console.Console;
-import node.Node;
 
 public class InputHandler implements MouseMotionListener, MouseListener, KeyListener {
 	public static Node selected;
