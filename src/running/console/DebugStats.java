@@ -36,8 +36,7 @@ public class DebugStats {
 	private static void paintSelected(Graphics2D g){
 		Node temp = InputHandler.selected;
 		g.drawString("Selected: " + (temp == null?"null":InputHandler.selected.toString()), 50, yLoc);yLoc+=20;
-		
-		g.drawString("Selected children#: " + (temp == null || temp.childConnection == null? "null" : temp.childConnection.length()), 50, yLoc);yLoc+=20;
+		g.drawString("Selected children#: " + temp == null ? "null" : String.valueOf(temp.getChildrenAmt()), 50, yLoc);yLoc+=20;
 	}
 	private static void paintRuler(Graphics2D g){
 		for(int i=0;i<=Main.baseRes.height;i+=25){
