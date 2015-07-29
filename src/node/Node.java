@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.util.HashSet;
 
 import running.InputHandler;
 import util.AngledLine;
@@ -19,9 +20,8 @@ public class Node implements Selectable{
 	private static final Color loneColor = new Color(255, 207, 51);
 	private float lineThickness = 1;
 	private Color lineColor = new Color(0, 0, 0);
-	//The following two are public solely for the purpose of debugging
-	public Connection parentConnection = null;
-	public Connection childConnection = null;
+	private HashSet<Node> childNodes = new HashSet<Node>();
+	private Node parentNode;
 	private AngledLine parentLine = null;
 	
 	public Node(Point2D location){
@@ -43,9 +43,8 @@ public class Node implements Selectable{
 		return this;
 	}
 	private void setParent(Node parent){
-		if(parent.childConnection == null) parent.childConnection = new Connection();
-		parent.childConnection.add(this);
-		parentConnection = parent.childConnection;
+		parent.childNodes.add(this);
+		parentNode = parent;
 	}
 	
 	public Ellipse2D getEllipse(){
@@ -55,13 +54,12 @@ public class Node implements Selectable{
 	public void paint(Graphics2D g){
 		paintNode(g);
 		paintLine(g);
-		
 	}
 	public void paintNode(Graphics2D g) {
 		g.setColor(getNodeColor());
 		g.fill(getEllipse());
-		if(childConnection != null){
-			childConnection.paintChildrenNodes(g);
+		for(Node i: childNodes){
+			i.paintNode(g);
 		}
 	}
 	public void paintLine(Graphics2D g) {
@@ -70,13 +68,13 @@ public class Node implements Selectable{
 			g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g.draw(parentLine.shape());
 		}
-		if(childConnection != null){
-			childConnection.paintChildrenLines(g);
+		for(Node i: childNodes){
+			i.paintLine(g);
 		}
 	}
 	
 	public void updateAsSelected() {
-		if(parentConnection == null){
+		if(parentNode == null){
 			//If a node has no parents, it is free. Same for humans...
 			location.setLocation(InputHandler.mouseLoc);
 		}else{
@@ -84,42 +82,44 @@ public class Node implements Selectable{
 		}
 		updateLine();
 	}
-	protected void updateLine(){
+	private void updateLine(){
 		if(parentLine != null){
 			parentLine.update();
 		}
-		if(childConnection != null){
-			childConnection.updateChildLines();
+		for(Node i: childNodes){
+			i.updateLine();
 		}
 	}
 
 	@Override
 	public boolean checkSelected() {
-		if(childConnection == null || !childConnection.checkChildrenSelected()){
-			if(getEllipse().contains(InputHandler.mouseLoc)){
-				InputHandler.selected = this;
-				return true;
-			}else{
-				return false;
-			}
+		for(Node i: childNodes){
+			if(i.checkSelected()) return true;
 		}
-		return true;
+		if(getEllipse().contains(InputHandler.mouseLoc)){
+			InputHandler.selected = this;
+			return true;
+		}else{
+			return false;
+		}
 	}
 	private Color getNodeColor(){
-		if(childConnection == null){
-			if(parentConnection == null){
+		if(childNodes.isEmpty()){
+			if(parentNode == null){
 				return loneColor;
 			}else{
 				return endColor;
 			}
 		}else{
-			if(parentConnection == null){
+			if(parentNode == null){
 				return baseColor;
 			}else{
 				return middleColor;
 			}
 		}
 	}
-	
+	public int getChildAmt(){
+		return childNodes.size();
+	}
 
 }
