@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
+import bodies.Slide;
 import running.console.Console;
 
 public class Display extends JPanel{
@@ -37,7 +38,7 @@ public class Display extends JPanel{
 	}
 	
 	private void paintItems(Graphics2D g){
-		Main.temp.paint(g);
+		Slide.paint(g);
 	}
 	
 	private void debugItems(Graphics2D g){

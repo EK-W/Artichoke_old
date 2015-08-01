@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import node.Node;
+import node.Selectable;
 import running.InputHandler;
 import running.Main;
 
@@ -12,7 +13,7 @@ public class DebugStats {
 	private static int yLoc = 25;
 	static{
 		CommandReader.menuMap.put("mouse", false);
-		CommandReader.menuMap.put("selected", false);
+		CommandReader.menuMap.put("selected", true);
 		CommandReader.menuMap.put("ruler", false);
 		CommandReader.menuMap.put("display", false);
 	}
@@ -34,9 +35,15 @@ public class DebugStats {
 		g.drawString("MouseY:  " + Math.round(InputHandler.mouseLoc.getY()), 50, yLoc);yLoc+=20;
 	}
 	private static void paintSelected(Graphics2D g){
-		Node temp = InputHandler.selected;
-		g.drawString("Selected: " + (temp == null?"null":InputHandler.selected.toString()), 50, yLoc);yLoc+=20;
-		g.drawString("Selected children#: " + temp == null? "null" : String.valueOf(temp.getChildAmt()), 50, yLoc);yLoc+=20;
+		if(InputHandler.selected == null || InputHandler.selected.getDebugInfo() == null){
+			g.drawString("Selected: null", 50, yLoc);yLoc+=20;
+			return;
+		}
+		g.drawString("Selected: " + InputHandler.selected.toString(), 50, yLoc);yLoc+=20;
+		String[] temp = InputHandler.selected.getDebugInfo();
+		for(int i = 0; i < temp.length; i++){
+			g.drawString(temp[i], 50, yLoc);yLoc+=20;
+		}
 	}
 	private static void paintRuler(Graphics2D g){
 		for(int i=0;i<=Main.baseRes.height;i+=25){

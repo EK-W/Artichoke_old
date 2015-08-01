@@ -13,6 +13,9 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import node.Node;
+import util.BodyBuilder;
+import bodies.Body;
+import bodies.Slide;
 
 public class Main extends JFrame implements ActionListener{
 
@@ -29,14 +32,8 @@ public class Main extends JFrame implements ActionListener{
 	public static final double xOffset;
 	public static final double yOffset;
 	public static final Dimension baseRes = new Dimension(1920,1080);
-	public static final Dimension baseRat = new Dimension(16,9);
+	public static final Dimension baseRat = new Dimension(16, 9);
 	InputHandler inputHandler = new InputHandler();
-	
-	//TEMPORARY
-			static Node temp = new Node(new Point2D.Double(640, 400));
-			static Node temp2 = new Node(temp, 135, 50);
-			static Node temp3a = new Node(temp2, 135, 50);
-			static Node temp3b = new Node(temp2, -135, 50);
 	
 	static {
 		//Get Screen Setup:
@@ -80,6 +77,9 @@ public class Main extends JFrame implements ActionListener{
 		this.add(panel);
 		animate.start();
 		
+		//TEMPORARY
+		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(480, 540), 1));
+		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(1440, 540), 1));
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

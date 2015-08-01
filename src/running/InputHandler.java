@@ -7,11 +7,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
-import running.console.Console;
+import bodies.Slide;
 import node.Node;
+import node.Selectable;
+import running.console.Console;
 
 public class InputHandler implements MouseMotionListener, MouseListener, KeyListener {
-	public static Node selected;
+	public static Selectable selected;
 	public static Point2D mouseLoc = new Point2D.Double();
 	
 	@Override
@@ -35,6 +37,12 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 		if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
 			System.out.println("Quit key pressed, quitting.");
 			System.exit(0);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_LEFT){
+			Slide.setSlide(Slide.getSlideNum() - 1);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+			Slide.setSlide(Slide.getSlideNum() + 1);
 		}
 		if(Console.commandInputOpen){
 			Console.keyInput(e);
@@ -78,8 +86,7 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton()==MouseEvent.BUTTON1){
-			//TEMPORARY
-			Main.temp.checkSelected();
+			Slide.checkSelected();
 		}
 		if(e.getButton()==MouseEvent.BUTTON2){
 			

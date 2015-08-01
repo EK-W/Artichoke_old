@@ -1,6 +1,6 @@
 package node;
 
 public interface Selectable {
-	public boolean checkSelected();
 	public void updateAsSelected();
+	public String[] getDebugInfo();
 }
