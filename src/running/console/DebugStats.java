@@ -3,20 +3,28 @@ package running.console;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.util.Scanner;
 
-import node.Node;
-import node.Selectable;
+import bodies.Slide;
 import running.InputHandler;
 import running.Main;
 
 public class DebugStats {
 	private static int yLoc = 25;
+	static boolean paintMouseInfo = false;
+	static boolean paintSelectedInfo = true;
+	static boolean paintRuler = false;
+	static boolean paintDisplayInfo = false;
+	static boolean paintSlideNum = true;
+	
 	static{
-		CommandReader.menuMap.put("mouse", false);
-		CommandReader.menuMap.put("selected", true);
-		CommandReader.menuMap.put("ruler", false);
-		CommandReader.menuMap.put("display", false);
+		CommandReader.menuMap.put("debugSlide", (Scanner sc) -> paintSlideNum = !paintSlideNum);
+		CommandReader.menuMap.put("debugMouse", (Scanner sc) -> paintMouseInfo = !paintMouseInfo);
+		CommandReader.menuMap.put("debugSelected", (Scanner sc) -> paintSelectedInfo = !paintSelectedInfo);
+		CommandReader.menuMap.put("debugRuler", (Scanner sc) -> paintRuler = !paintRuler);
+		CommandReader.menuMap.put("debugDisplay", (Scanner sc) -> paintDisplayInfo = !paintDisplayInfo);
 	}
+
 	public static void paintStats(Graphics2D g){
 		g.setColor(Color.black);
 		g.setFont(new Font("Times New Roman", Font.PLAIN, 20));
@@ -24,15 +32,20 @@ public class DebugStats {
 //		if(showSimpleMouse)paintSimpleMouse(g);
 //		if(showSelected)paintSelected(g);
 //		if(showRuler)paintRuler(g);
-		if(CommandReader.menuMap.get("mouse"))paintSimpleMouse(g);
-		if(CommandReader.menuMap.get("selected"))paintSelected(g);
-		if(CommandReader.menuMap.get("ruler"))paintRuler(g);
-		if(CommandReader.menuMap.get("display"))paintDisplayInfo(g);
+		if(paintSlideNum)paintSlideNum(g);
+		if(paintMouseInfo)paintSimpleMouse(g);
+		if(paintSelectedInfo)paintSelected(g);
+		if(paintRuler)paintRuler(g);
+		if(paintDisplayInfo)paintDisplayInfo(g);
 		yLoc=25;
 	}
+	private static void paintSlideNum(Graphics2D g) {
+		g.drawString("Slide Number: " + Math.round(Slide.getSlideNum()),50,yLoc);yLoc+=20;
+		
+	}
 	private static void paintSimpleMouse(Graphics2D g){
-		g.drawString("MouseX:  " + Math.round(InputHandler.mouseLoc.getX()),50,yLoc);yLoc+=20;
-		g.drawString("MouseY:  " + Math.round(InputHandler.mouseLoc.getY()), 50, yLoc);yLoc+=20;
+		g.drawString("MouseX: " + Math.round(InputHandler.mouseLoc.getX()),50,yLoc);yLoc+=20;
+		g.drawString("MouseY: " + Math.round(InputHandler.mouseLoc.getY()), 50, yLoc);yLoc+=20;
 	}
 	private static void paintSelected(Graphics2D g){
 		if(InputHandler.selected == null || InputHandler.selected.getDebugInfo() == null){
