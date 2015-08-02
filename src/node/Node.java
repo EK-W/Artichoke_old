@@ -13,7 +13,7 @@ import java.util.HashSet;
 import running.InputHandler;
 import util.AngleMath;
 
-public class Node implements Selectable{
+public class Node implements Selectable, Cloneable{
 	
 	private static final double RADIUS = 7;
 	private Point2D location;
@@ -30,7 +30,6 @@ public class Node implements Selectable{
 	private double length = 25;
 	private boolean lockedAngle = true;
 	private boolean lockedLength = true;
-	
 	
 	public Node(Point2D location){
 		this.location = location;
@@ -159,5 +158,16 @@ public class Node implements Selectable{
 			"Selected angle: " + angle,
 		};
 	}
-
+	
+	@Override
+	public Object clone(){
+		Node ret = new Node(new Point2D.Double(location.getX(), location.getY()));
+		ret.lineProperties(lineThickness, new Color(lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha()));
+		ret.lockedAngle = lockedAngle;
+		ret.lockedLength = lockedLength;
+		for(Node i: childNodes){
+			ret.connectChild((Node) i.clone());
+		}
+		return ret;
+	}
 }

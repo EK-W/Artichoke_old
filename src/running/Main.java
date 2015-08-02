@@ -78,8 +78,8 @@ public class Main extends JFrame implements ActionListener{
 		animate.start();
 		
 		//TEMPORARY
-		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(480, 540), 1));
-		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(1440, 540), 1));
+		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(480, 540), 4));
+		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(1440, 540), 4));
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

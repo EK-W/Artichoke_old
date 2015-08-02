@@ -8,6 +8,7 @@ import java.util.Scanner;
 import bodies.Slide;
 import running.InputHandler;
 import running.Main;
+import util.GifSequenceWriter;
 
 public class DebugStats {
 	private static int yLoc = 25;
@@ -15,24 +16,29 @@ public class DebugStats {
 	static boolean paintSelectedInfo = true;
 	static boolean paintRuler = false;
 	static boolean paintDisplayInfo = false;
-	static boolean paintSlideNum = true;
+	static boolean paintSlideInfo = true;
 	
 	static{
-		CommandReader.menuMap.put("debugSlide", (Scanner sc) -> paintSlideNum = !paintSlideNum);
+		CommandReader.menuMap.put("debugSlide", (Scanner sc) -> paintSlideInfo = !paintSlideInfo);
 		CommandReader.menuMap.put("debugMouse", (Scanner sc) -> paintMouseInfo = !paintMouseInfo);
 		CommandReader.menuMap.put("debugSelected", (Scanner sc) -> paintSelectedInfo = !paintSelectedInfo);
 		CommandReader.menuMap.put("debugRuler", (Scanner sc) -> paintRuler = !paintRuler);
 		CommandReader.menuMap.put("debugDisplay", (Scanner sc) -> paintDisplayInfo = !paintDisplayInfo);
+		CommandReader.menuMap.put("addSlide", (Scanner sc) -> Slide.addSlide());
+		CommandReader.menuMap.put("export", (Scanner sc) -> {
+			if(sc.hasNextInt()){
+				GifSequenceWriter.writeGif(sc.nextInt());
+			} else {
+				GifSequenceWriter.writeGif(100);
+			}
+		});
 	}
 
 	public static void paintStats(Graphics2D g){
 		g.setColor(Color.black);
 		g.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		
-//		if(showSimpleMouse)paintSimpleMouse(g);
-//		if(showSelected)paintSelected(g);
-//		if(showRuler)paintRuler(g);
-		if(paintSlideNum)paintSlideNum(g);
+
+		if(paintSlideInfo)paintSlideNum(g);
 		if(paintMouseInfo)paintSimpleMouse(g);
 		if(paintSelectedInfo)paintSelected(g);
 		if(paintRuler)paintRuler(g);
@@ -41,6 +47,7 @@ public class DebugStats {
 	}
 	private static void paintSlideNum(Graphics2D g) {
 		g.drawString("Slide Number: " + Math.round(Slide.getSlideNum()),50,yLoc);yLoc+=20;
+		g.drawString("Slides Size: " + Math.round(Slide.getSlideAmt()),50,yLoc);yLoc+=20;
 		
 	}
 	private static void paintSimpleMouse(Graphics2D g){
