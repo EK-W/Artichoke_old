@@ -7,29 +7,25 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
-import bodies.Slide;
-import node.Node;
-import node.Selectable;
 import running.console.Console;
 
-public class InputHandler implements MouseMotionListener, MouseListener, KeyListener {
-	public static Selectable selected;
-	public static Point2D mouseLoc = new Point2D.Double();
+public class InputHandler implements MouseMotionListener, MouseListener, KeyListener{
+	//These variables exist for "debugging" purposes only
+	private static Point2D mouseLoc = new Point2D.Double();
+	private static boolean mouseDown = false;
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		//mouseLoc.setLocation(e.getX()/Main.scaleX,e.getY()/Main.scaleY);
 		mouseLoc.setLocation((e.getX()-Main.xOffset/2)/Main.paintScale,(e.getY()-Main.yOffset/2)/Main.paintScale);
-		if(selected!=null)
-		selected.updateAsSelected();
+		Main.panel.onMouseMove(mouseLoc, true);
+		Main.panel.repaint();
 	}
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		//mouseLoc.setLocation(e.getX()/Main.scaleX,e.getY()/Main.scaleY);
-		//mouseLoc.setLocation(e.getX(),e.getY());
-		//mouseLoc.setLocation((e.getX()/Main.paintScale)-Main.xOffset/2,(e.getY()/Main.paintScale)+Main.yOffset/2);
 		mouseLoc.setLocation((e.getX()-Main.xOffset/2)/Main.paintScale,(e.getY()-Main.yOffset/2)/Main.paintScale);
+		Main.panel.onMouseMove(mouseLoc, false);
+		Main.panel.repaint();
 	}
 	
 	@Override
@@ -38,21 +34,17 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 			System.out.println("Quit key pressed, quitting.");
 			System.exit(0);
 		}
-		if(e.getKeyCode()==KeyEvent.VK_LEFT){
-			Slide.setSlide(Slide.getSlideNum() - 1);
-		}
-		if(e.getKeyCode()==KeyEvent.VK_RIGHT){
-			Slide.setSlide(Slide.getSlideNum() + 1);
-		}
 		if(Console.commandInputOpen){
 			Console.keyInput(e);
-			return;
-		}
-		if(e.getKeyCode()==KeyEvent.VK_ENTER)Console.commandInputOpen=true;
-		if(e.getKeyCode()==KeyEvent.VK_SLASH){
+		} else if(e.getKeyCode()==KeyEvent.VK_ENTER){
+			Console.commandInputOpen=true;
+		} else if(e.getKeyCode()==KeyEvent.VK_SLASH){
 			Console.commandInputOpen=true;
 			Console.sendChar('/');
+		} else {
+			Main.panel.onKeyPress(e);
 		}
+		Main.panel.repaint();
 	}
 	
 	@Override
@@ -85,19 +77,25 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(e.getButton()==MouseEvent.BUTTON1){
-			Slide.checkSelected();
-		}
-		if(e.getButton()==MouseEvent.BUTTON2){
-			
-		}
-		
+		mouseLoc.setLocation((e.getX()-Main.xOffset/2)/Main.paintScale,(e.getY()-Main.yOffset/2)/Main.paintScale);
+		Main.panel.onMousePress(mouseLoc, e.getButton());
+		mouseDown = true;
+		Main.panel.repaint();
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		selected=null;
-		
+		mouseLoc.setLocation((e.getX()-Main.xOffset/2)/Main.paintScale,(e.getY()-Main.yOffset/2)/Main.paintScale);
+		Main.panel.onMouseRelease(mouseLoc, e.getButton());
+		mouseDown = false;
+		Main.panel.repaint();
+	}
+
+	public static String[] getDebugInfo() {
+		return new String[]{
+			("Mouse location: X: " + mouseLoc.getX() + " Y: " + mouseLoc.getY()),
+			("Mouse is " + (mouseDown? "down" : "up") + ".")
+		};
 	}
 
 }

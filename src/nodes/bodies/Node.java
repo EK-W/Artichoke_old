@@ -1,4 +1,4 @@
-package node;
+package nodes.bodies;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,8 +10,9 @@ import java.awt.geom.Ellipse2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
 
+import nodes.util.AngleMath;
 import running.InputHandler;
-import util.AngleMath;
+import running.displayPanels.AnimationPanel;
 
 public class Node implements Selectable, Cloneable{
 	
@@ -86,16 +87,17 @@ public class Node implements Selectable, Cloneable{
 		}
 	}
 	
-	public void updateAsSelected() {
+	@Override
+	public void updateAsSelected(Point2D p) {
 		if(parentNode == null){
 			//If a node has no parents, it is free. Same for humans...
-			location.setLocation(InputHandler.mouseLoc);
+			location.setLocation(p);
 			updateLine(0);
 		}else{
 			double delta = angle;
-			angle = AngleMath.getAngle(parentNode.location, InputHandler.mouseLoc);
+			angle = AngleMath.getAngle(parentNode.location, p);
 			if(!lockedLength){
-				length = parentNode.location.distance(InputHandler.mouseLoc);
+				length = parentNode.location.distance(p);
 			}
 			if(SNAP_ANGLE){
 				snapAngle();
@@ -124,16 +126,16 @@ public class Node implements Selectable, Cloneable{
 		}
 	}
 
-
-	public boolean checkSelected() {
+	@Override
+	public Selectable checkSelected(Point2D p) {
 		for(Node i: childNodes){
-			if(i.checkSelected()) return true;
+			Selectable temp = i.checkSelected(p);
+			if(temp != null) return temp;
 		}
-		if(getEllipse().contains(InputHandler.mouseLoc)){
-			InputHandler.selected = this;
-			return true;
+		if(getEllipse().contains(p)){
+			return this;
 		}else{
-			return false;
+			return null;
 		}
 	}
 	private Color getNodeColor(){
@@ -169,5 +171,14 @@ public class Node implements Selectable, Cloneable{
 			ret.connectChild((Node) i.clone());
 		}
 		return ret;
+	}
+
+	public void paintMask(Graphics2D g) {
+		for(Node i: childNodes){
+			g.setColor(Color.black);
+			g.setStroke(new BasicStroke(i.lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			g.draw(new Line2D.Double(location, i.location));
+			i.paintLine(g);
+		}
 	}
 }

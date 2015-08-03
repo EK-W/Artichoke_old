@@ -1,11 +1,11 @@
-package util;
+package nodes.util;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
-import node.Node;
-import bodies.BoundTree;
+import nodes.bodies.BoundTree;
+import nodes.bodies.Node;
 
 public class BodyBuilder {
 	public static BoundTree makePerson(Point2D location, double size){

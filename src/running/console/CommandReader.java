@@ -6,11 +6,15 @@ import java.util.Scanner;
 
 public class CommandReader {
 	
-	public static HashMap<String, Command> menuMap = new HashMap<String, Command>();
+	private static HashMap<String, Command> menuMap = new HashMap<String, Command>();
 	
-	
+	public static void addCommand(String str, Command cmd){
+		menuMap.put(str.toLowerCase(), cmd);
+	}
 	
 	public static void sendCommand(String cmd){
+		System.out.println("Command sent: \"" + cmd + "\"");
+		cmd = cmd.toLowerCase();
 		if(cmd.length() <= 0){
 			return;
 		}
@@ -21,6 +25,8 @@ public class CommandReader {
 		String temp = scan.next();
 		if(menuMap.containsKey(temp)){
 			menuMap.get(temp).execute(scan);
+		} else {
+			System.out.println("----no command found.");
 		}
 		scan.close();
 	}

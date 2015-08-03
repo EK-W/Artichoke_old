@@ -1,8 +1,8 @@
-package util;
+package nodes.util;
 
 import java.awt.Color;
 
-import node.Node;
+import nodes.bodies.Node;
 
 public class DoubleNode {
 	public Node left;

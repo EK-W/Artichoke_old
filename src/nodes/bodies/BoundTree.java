@@ -1,10 +1,9 @@
-package bodies;
+package nodes.bodies;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 
-import node.Node;
-
-public class BoundTree extends Body implements Cloneable{
+public class BoundTree extends Body implements Cloneable {
 	Node base;
 	public BoundTree(Node n) {
 		super(n);
@@ -16,8 +15,8 @@ public class BoundTree extends Body implements Cloneable{
 		base.paintNode(g);
 	}
 	@Override
-	public boolean checkSelected() {
-		return base.checkSelected();
+	public Selectable checkSelected(Point2D p) {
+		return base.checkSelected(p);
 	}
 	@Override
 	public void paintImg(Graphics2D g) {
@@ -26,6 +25,10 @@ public class BoundTree extends Body implements Cloneable{
 	@Override
 	public Object clone() {
 		return new BoundTree((Node) base.clone());
+	}
+	@Override
+	public void paintMask(Graphics2D g) {
+		base.paintMask(g);
 	}
 	
 }

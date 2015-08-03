@@ -5,19 +5,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
-import javax.swing.Timer;
 
-import node.Node;
-import util.BodyBuilder;
-import bodies.Body;
-import bodies.Slide;
+import running.displayPanels.AnimationPanel;
+import running.displayPanels.DisplayPanel;
 
-public class Main extends JFrame implements ActionListener{
+public class Main extends JFrame {
 
 	/**
 	 * 
@@ -25,14 +19,12 @@ public class Main extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 2912746798894003330L;
 	public static Dimension screen = new Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize());
 	public static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
-	public Timer animate = new Timer(50,this);
-//	public static final double scaleY = screen.getHeight()/1080d;
-//	public static final double scaleX = screen.getWidth()/1920d;
 	public static final double paintScale;
 	public static final double xOffset;
 	public static final double yOffset;
 	public static final Dimension baseRes = new Dimension(1920,1080);
 	public static final Dimension baseRat = new Dimension(16, 9);
+	public static DisplayPanel panel = new AnimationPanel();
 	InputHandler inputHandler = new InputHandler();
 	
 	static {
@@ -55,7 +47,6 @@ public class Main extends JFrame implements ActionListener{
 		//Screen Setup Gotten.
 	}
 	
-	Display panel = new Display();
 	public static void main(String[] args){
 		@SuppressWarnings("unused")
 		Main m = new Main();
@@ -73,17 +64,7 @@ public class Main extends JFrame implements ActionListener{
 		this.addMouseListener(inputHandler);
 		this.addMouseMotionListener(inputHandler);
 		this.setVisible(true);
-		
 		this.add(panel);
-		animate.start();
-		
-		//TEMPORARY
-		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(480, 540), 4));
-		Slide.addBody(BodyBuilder.makePerson(new Point2D.Double(1440, 540), 4));
-	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		repaint();
 	}
 	
 	public void paint(Graphics g){

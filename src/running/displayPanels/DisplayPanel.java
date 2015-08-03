@@ -1,24 +1,25 @@
-package running;
+package running.displayPanels;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 
 import javax.swing.JPanel;
 
-import bodies.Slide;
+import running.Main;
 import running.console.Console;
 
-public class Display extends JPanel{
+public abstract class DisplayPanel extends JPanel{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4312883470921417750L;
-
-	public Display(){
-		
-	}
+	private static final long serialVersionUID = 5298877747564206746L;
+	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -32,16 +33,15 @@ public class Display extends JPanel{
 		g.fillRect(0, 0, Main.baseRes.width, Main.baseRes.height);
 		g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC));
 		g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));
-		//g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON));
-		paintItems(g2);
-		debugItems(g2);
+		paint(g2);
+		Console.paint(g2);
 	}
 	
-	private void paintItems(Graphics2D g){
-		Slide.paint(g);
-	}
+	protected abstract void paint(Graphics2D g);
 	
-	private void debugItems(Graphics2D g){
-		Console.paint(g);
-	}
+	public abstract String[] getDebugInfo();
+	public abstract void onMousePress(Point2D e, int mouseButton);
+	public abstract void onMouseRelease(Point2D e, int mouseButton);
+	public abstract void onMouseMove(Point2D e, boolean pressed);
+	public abstract void onKeyPress(KeyEvent e);
 }

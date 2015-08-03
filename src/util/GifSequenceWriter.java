@@ -27,7 +27,8 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 
-import bodies.Slide;
+import running.displayPanels.AnimationPanel;
+import running.displayPanels.Slide;
 
 public class GifSequenceWriter {
   protected ImageWriter gifWriter;
@@ -49,11 +50,11 @@ public class GifSequenceWriter {
   public static void writeGif(int delay){	  
 	  try {
 		  ImageOutputStream output = new FileImageOutputStream(new File("gif.gif"));
-		  BufferedImage[] toWrite = Slide.toImgArray();
+		  BufferedImage[] toWrite = AnimationPanel.toImgArray();
 		  GifSequenceWriter writer = new GifSequenceWriter(output, toWrite[0].getType(), delay, true);
-		  for(int i=1; i<toWrite.length; i++) {
+		  for(int i = 0; i < toWrite.length; i++) {
 		      writer.writeToSequence(toWrite[i]);
-		    }
+		  }
 	  } catch (Exception e){
 		  e.printStackTrace();
 	  }

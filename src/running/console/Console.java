@@ -43,7 +43,7 @@ public class Console {
 	
 	public static void paint(Graphics2D g){
 		DebugStats.paintStats(g);
-		if(!commandInputOpen)return;
+		if(!commandInputOpen) return;
 		g.setColor(new Color(168,168,168));
 		g.fill(new Rectangle2D.Double(0,Main.baseRes.getHeight()-inputBox.getHeight(),inputBox.getWidth(),inputBox.getHeight()));
 		g.setColor(Color.BLACK);
