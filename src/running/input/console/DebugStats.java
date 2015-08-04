@@ -1,4 +1,4 @@
-package running.console;
+package running.input.console;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,9 +7,9 @@ import java.awt.geom.Point2D;
 import java.util.Scanner;
 
 import nodes.util.BodyBuilder;
-import running.InputHandler;
 import running.Main;
 import running.displayPanels.AnimationPanel;
+import running.input.InputHandler;
 import util.GifSequenceWriter;
 
 public class DebugStats {
@@ -34,11 +34,11 @@ public class DebugStats {
 			}
 		});
 		CommandReader.addCommand("addPerson", (Scanner sc) -> readPerson(sc));
+		CommandReader.addCommand("removeBody", (Scanner sc) -> AnimationPanel.removeSelectedBody());
 	}
 
 	public static void paintStats(Graphics2D g){
 		g.setColor(Color.black);
-		g.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		
 		if(paintRuler)paintRuler(g);
 		if(paintPanelInfo)paintPanelInfo(g);
@@ -84,9 +84,9 @@ public class DebugStats {
 		xLoc = 50;
 	}
 	private static void paintDisplayInfo(Graphics2D g){
-		g.drawString("Programmed Resolution: " + Main.baseRes.getWidth()+" x "+Main.baseRes.getHeight(), 50, yLoc);yLoc+=20;
-		g.drawString("Native Resolution: " + Main.screen.getWidth()+" x "+Main.screen.getHeight(), 50, yLoc);yLoc+=20;
-		g.drawString("Paint Scale: " + Main.paintScale, 50, yLoc);yLoc+=20;
-		g.drawString("Offsets: " + Main.xOffset+", "+Main.yOffset, 50, yLoc);yLoc+=20;
+		g.drawString("Programmed Resolution: " + Main.baseRes.getWidth()+" x "+Main.baseRes.getHeight(), xLoc, yLoc);yLoc+=20;
+		g.drawString("Native Resolution: " + Main.screen.getWidth()+" x "+Main.screen.getHeight(), xLoc, yLoc);yLoc+=20;
+		g.drawString("Paint Scale: " + Main.paintScale, xLoc, yLoc);yLoc+=20;
+		g.drawString("Offsets: " + Main.xOffset+", "+Main.yOffset, xLoc, yLoc);yLoc+=20;
 	}
 }

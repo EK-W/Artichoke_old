@@ -53,4 +53,8 @@ public class Slide{
 			i.paintMask(g);
 		}
 	}
+	
+	protected void deleteBody(Body b){
+		bodies.remove(b);
+	}
 }

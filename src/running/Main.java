@@ -2,6 +2,7 @@ package running;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -10,6 +11,7 @@ import javax.swing.JFrame;
 
 import running.displayPanels.AnimationPanel;
 import running.displayPanels.DisplayPanel;
+import running.input.InputHandler;
 
 public class Main extends JFrame {
 
@@ -25,6 +27,7 @@ public class Main extends JFrame {
 	public static final Dimension baseRes = new Dimension(1920,1080);
 	public static final Dimension baseRat = new Dimension(16, 9);
 	public static DisplayPanel panel = new AnimationPanel();
+	public static final Font defaultFont = new Font("Times New Roman", Font.PLAIN, 20);
 	InputHandler inputHandler = new InputHandler();
 	
 	static {
@@ -53,7 +56,6 @@ public class Main extends JFrame {
 	}
 	
 	public Main(){
-		
 		this.setBackground(new Color(204,204,204));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setUndecorated(true);

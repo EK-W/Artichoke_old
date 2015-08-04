@@ -1,6 +1,7 @@
 package running.displayPanels;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -11,7 +12,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JPanel;
 
 import running.Main;
-import running.console.Console;
+import running.input.console.Console;
 
 public abstract class DisplayPanel extends JPanel{
 
@@ -28,7 +29,7 @@ public abstract class DisplayPanel extends JPanel{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.translate(Main.xOffset/2, Main.yOffset/2);
 		g2.scale(Main.paintScale, Main.paintScale);
-		
+		g.setFont(Main.defaultFont);
 		g.setColor(Color.white);
 		g.fillRect(0, 0, Main.baseRes.width, Main.baseRes.height);
 		g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC));

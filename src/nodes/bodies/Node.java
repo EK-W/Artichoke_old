@@ -3,34 +3,34 @@ package nodes.bodies;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Ellipse2D.Double;
-import java.awt.geom.Rectangle2D;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import nodes.util.AngleMath;
-import running.InputHandler;
-import running.displayPanels.AnimationPanel;
 
-public class Node implements Selectable, Cloneable{
+
+public class Node implements Selectable {
 	
 	private static final double RADIUS = 7;
 	private Point2D location;
-	private static final Color middleColor = new Color(158, 249, 255);
-	private static final Color endColor = new Color(154, 0, 196);
-	private static final Color baseColor = new Color(255, 94, 94);
-	private static final Color loneColor = new Color(255, 207, 51);
+	private static final Color[] colors = {
+		new Color(255, 207, 51),
+		new Color(154, 0, 196),
+		new Color(255, 94, 94),
+		new Color(158, 249, 255)
+	};
 	private float lineThickness = 1;
 	public static final boolean SNAP_ANGLE = true;
 	private Color lineColor = new Color(0, 0, 0);
-	private HashSet<Node> childNodes = new HashSet<Node>();
-	private Node parentNode;
+	private ArrayList<Node> childNodes = new ArrayList<Node>();
+	private Point2D parentLoc;
 	private double angle = 180;
 	private double length = 25;
-	private boolean lockedAngle = true;
-	private boolean lockedLength = true;
+	private Body body;
+	
 	
 	public Node(Point2D location){
 		this.location = location;
@@ -45,37 +45,48 @@ public class Node implements Selectable, Cloneable{
 		this.lineColor = lineColor;
 		return this;
 	}
-	public Node connectChild(Node child){
-		if(location == null) throw new NullPointerException("attempted to connect a child to a node with a null location");
-		childNodes.add(child);
-		child.parentNode = this;
+	public Node connectParent(Node parent){
+		if(parent.location == null) throw new NullPointerException("attempted to connect a child to a node with a null location");
+		parent.childNodes.add(this);
+		body = parent.body;
+		parentLoc = parent.location;
 		//This will be true if the Node(angle, length) constructor is used
-		if(child.location == null){
-			child.location = AngleMath.getLocation(location, child.angle, child.length);
+		if(location == null){
+			location = AngleMath.getLocation(parent.location, angle, length);
 		}else{
-			child.angle = AngleMath.getAngle(location, child.location);
-			child.length = location.distance(child.location);
+			angle = AngleMath.getAngle(parent.location, location);
+			length = parent.location.distance(location);
 		}
 		return this;
 	}
 	
-	public Node connectParent(Node parent){
-		parent.connectChild(this);
-		return this;
-	}
+//	protected Node connectChild(Node child){
+//		if(location == null) throw new NullPointerException("attempted to connect a child to a node with a null location");
+//		childNodes.add(child);
+//		child.parentLoc = location;
+//		//This will be true if the Node(angle, length) constructor is used
+//		if(child.location == null){
+//			child.location = AngleMath.getLocation(location, child.angle, child.length);
+//		}else{
+//			child.angle = AngleMath.getAngle(location, child.location);
+//			child.length = location.distance(child.location);
+//		}
+//		return this;
+//	}
 	
-	public Ellipse2D getEllipse(){
+	@Override
+	public Shape getShape(){
 		return new Ellipse2D.Double(location.getX() - RADIUS, location.getY() - RADIUS, RADIUS * 2, RADIUS * 2);
 	}
 	
-	public void paintNode(Graphics2D g) {
+	protected void paintNode(Graphics2D g) {
 		g.setColor(getNodeColor());
-		g.fill(getEllipse());
+		g.fill(getShape());
 		for(Node i: childNodes){
 			i.paintNode(g);
 		}
 	}
-	public void paintLine(Graphics2D g) {
+	protected void paintLine(Graphics2D g) {
 		for(Node i: childNodes){
 			g.setColor(i.lineColor);
 			g.setStroke(new BasicStroke(i.lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
@@ -89,20 +100,21 @@ public class Node implements Selectable, Cloneable{
 	
 	@Override
 	public void updateAsSelected(Point2D p) {
-		if(parentNode == null){
+		if(parentLoc == null){
 			//If a node has no parents, it is free. Same for humans...
 			location.setLocation(p);
 			updateLine(0);
 		}else{
 			double delta = angle;
-			angle = AngleMath.getAngle(parentNode.location, p);
-			if(!lockedLength){
-				length = parentNode.location.distance(p);
+			angle = AngleMath.getAngle(parentLoc, p);
+			if(!body.lockedLength()){
+				length = parentLoc.distance(p);
 			}
 			if(SNAP_ANGLE){
 				snapAngle();
 			}
-			location = AngleMath.getLocation(parentNode.location, angle, length);	
+			location.setLocation(AngleMath.getLocation(parentLoc, angle, length));
+			//location = (AngleMath.getLocation(parentLoc, angle, length));
 			updateLine(delta - angle);
 		}
 	}
@@ -118,8 +130,8 @@ public class Node implements Selectable, Cloneable{
 	private void updateLine(double delta){
 		for(Node i: childNodes){
 			//i.angle += (i.lockedAngle? delta : 0);
-			i.angle -= (i.lockedAngle? delta : 0);
-			i.location = AngleMath.getLocation(location, i.angle, i.length);	
+			i.angle -= (body.lockedAngle()? delta : 0);
+			i.location.setLocation(AngleMath.getLocation(location, i.angle, i.length));	
 		}
 		for(Node i: childNodes){
 			i.updateLine(delta);
@@ -132,43 +144,31 @@ public class Node implements Selectable, Cloneable{
 			Selectable temp = i.checkSelected(p);
 			if(temp != null) return temp;
 		}
-		if(getEllipse().contains(p)){
+		if(getShape().contains(p)){
 			return this;
 		}else{
 			return null;
 		}
 	}
 	private Color getNodeColor(){
-		if(childNodes.isEmpty()){
-			if(parentNode == null){
-				return loneColor;
-			}else{
-				return endColor;
-			}
-		}else{
-			if(parentNode == null){
-				return baseColor;
-			}else{
-				return middleColor;
-			}
-		}
+		return colors[(parentLoc == null? 0 : 1) + (childNodes.isEmpty()? 0 : 2)];
 	}
 
 	@Override
 	public String[] getDebugInfo() {
 		return new String[] {
+			"Selected: " + toString(),
 			"Selected angle: " + angle,
+			"Selected length: " + length,
+			"Selected parentLoc: " + (parentLoc == null? "null" : parentLoc.toString()),
 		};
 	}
 	
-	@Override
-	public Object clone(){
+	public Node clone(){
 		Node ret = new Node(new Point2D.Double(location.getX(), location.getY()));
 		ret.lineProperties(lineThickness, new Color(lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha()));
-		ret.lockedAngle = lockedAngle;
-		ret.lockedLength = lockedLength;
 		for(Node i: childNodes){
-			ret.connectChild((Node) i.clone());
+			i.clone().connectParent(ret);
 		}
 		return ret;
 	}
@@ -179,6 +179,17 @@ public class Node implements Selectable, Cloneable{
 			g.setStroke(new BasicStroke(i.lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g.draw(new Line2D.Double(location, i.location));
 			i.paintLine(g);
+		}
+	}
+	
+	@Override
+	public Body getBody(){
+		return body;
+	}
+	protected void updateBody(Body body){
+		this.body = body;
+		for(Node i: childNodes){
+			i.updateBody(body);
 		}
 	}
 }

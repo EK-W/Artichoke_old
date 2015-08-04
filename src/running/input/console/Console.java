@@ -1,4 +1,4 @@
-package running.console;
+package running.input.console;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,9 +13,6 @@ public class Console {
 	public static boolean commandInputOpen = false;
 	private static String command = "";
 	private static final Dimension inputBox = new Dimension((int) Main.baseRes.getWidth(),35);
-	
-//	if(cursorCounter<cursorDelay)return command+'_';
-//	else return command;
 	
 	public static String getCommandText(){
 		return command;

@@ -12,5 +12,7 @@ public abstract class Body implements Cloneable{
 	protected Body(Node n) {
 		
 	}
+	protected abstract boolean lockedAngle();
+	protected abstract boolean lockedLength();
 	public abstract void paintMask(Graphics2D g);
 }

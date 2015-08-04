@@ -1,4 +1,4 @@
-package running.console;
+package running.input.console;
 
 import java.util.HashMap;
 import java.util.Map;

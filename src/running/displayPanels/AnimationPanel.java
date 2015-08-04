@@ -1,5 +1,6 @@
 package running.displayPanels;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -10,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import running.Main;
+import running.input.Button;
 import nodes.bodies.Body;
 import nodes.bodies.Selectable;
 
@@ -19,9 +21,17 @@ public class AnimationPanel extends DisplayPanel{
 	 */
 	private static final long serialVersionUID = 4312883470921417750L;
 	public static Selectable selected;
+	private static ArrayList<Button> buttons = new ArrayList<Button>();
 	//ArrayList because it will be referenced often. It will also be added to often so maybe this is a bad idea...
 	private static ArrayList<Slide> slides = new ArrayList<Slide>();
 	private static int slideNum = 0;
+	
+	static {
+		buttons.add(new Button("Add Slide", new Rectangle2D.Double(Main.baseRes.getWidth() - 100, 0, 100, 50), true, () ->{
+			addSlide();
+		}));
+		
+	}
 	
 	public AnimationPanel(){
 		if(slides.size() == 0){
@@ -37,6 +47,14 @@ public class AnimationPanel extends DisplayPanel{
 			g.fill(new Rectangle2D.Double(0, 0, Main.baseRes.getWidth(), Main.baseRes.getHeight()));
 		}
 		slides.get(slideNum).paint(g);
+		if(selected != null){
+			g.setColor(new Color(250, 250, 0));
+			g.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			g.draw(selected.getShape());
+		}
+		for(Button i: buttons){
+			i.paint(g);
+		}
 	}
 	
 	public static void addSlide(){
@@ -55,18 +73,29 @@ public class AnimationPanel extends DisplayPanel{
 	@Override
 	public void onMousePress(Point2D p, int mouseButton) {
 		if(mouseButton == MouseEvent.BUTTON1){
+			selected = null;
 			selected = slides.get(slideNum).checkSelected(p);
+			if(selected == null){
+				for(Button i: buttons){
+					if(i.mouseDown(p)){
+						break;
+					}
+				}
+			}
 		}
 	}
 
 	@Override
 	public void onMouseRelease(Point2D p, int mouseButton) {
-		selected = null;
+		//selected = null;
+		for(Button i: buttons){
+			i.mouseUp();
+		}
 	}
 
 	@Override
 	public void onMouseMove(Point2D p, boolean pressed) {
-		if(selected != null){
+		if(pressed && selected != null){
 			selected.updateAsSelected(p);
 		}
 	}
@@ -75,9 +104,11 @@ public class AnimationPanel extends DisplayPanel{
 	public void onKeyPress(KeyEvent e) {
 		if(e.getKeyCode()==KeyEvent.VK_LEFT && slideNum > 0){
 			slideNum--;
+			selected = null;
 		}
 		if(e.getKeyCode()==KeyEvent.VK_RIGHT && slideNum < slides.size() - 1){
 			slideNum++;
+			selected = null;
 		}
 	}
 	
@@ -96,6 +127,13 @@ public class AnimationPanel extends DisplayPanel{
 		}
 		return ret;
 	}
+	
+	public static void removeSelectedBody(){
+		if(selected != null){
+			slides.get(slideNum).deleteBody(selected.getBody());
+			selected = null;
+		}
+	}
 
 	@Override
 	public String[] getDebugInfo() {
@@ -108,6 +146,7 @@ public class AnimationPanel extends DisplayPanel{
 			String[] temp = selected.getDebugInfo();
 			String[] ret = new String[temp.length + 1];
 			ret[0] = ("Slide number: " + slideNum + " / " + (slides.size() - 1));
+			
 			for(int i = 0; i < temp.length; i++){
 				ret[i + 1] = temp[i];
 			}

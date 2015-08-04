@@ -1,4 +1,4 @@
-package running;
+package running.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -7,7 +7,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
-import running.console.Console;
+import running.Main;
+import running.input.console.Console;
 
 public class InputHandler implements MouseMotionListener, MouseListener, KeyListener{
 	//These variables exist for "debugging" purposes only
