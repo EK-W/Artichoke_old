@@ -57,6 +57,10 @@ public class Button {
 		clicked = false;
 	}
 	
+	public void setLocation(Point2D p){
+		bounds.setRect(p.getX(), p.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+	
 	public void paint(Graphics2D g){
 		if(!enabled)
 			return;

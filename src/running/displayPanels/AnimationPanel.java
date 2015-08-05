@@ -10,9 +10,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
+
 import running.Main;
 import running.input.Button;
 import nodes.bodies.Body;
+import nodes.bodies.Node;
 import nodes.bodies.Selectable;
 
 public class AnimationPanel extends DisplayPanel{
@@ -21,21 +24,32 @@ public class AnimationPanel extends DisplayPanel{
 	 */
 	private static final long serialVersionUID = 4312883470921417750L;
 	public static Selectable selected;
-	private static ArrayList<Button> buttons = new ArrayList<Button>();
+	
 	//ArrayList because it will be referenced often. It will also be added to often so maybe this is a bad idea...
 	private static ArrayList<Slide> slides = new ArrayList<Slide>();
 	private static int slideNum = 0;
-	
-	static {
-		buttons.add(new Button("Add Slide", new Rectangle2D.Double(Main.baseRes.getWidth() - 100, 0, 100, 50), true, () ->{
-			addSlide();
-		}));
-		
-	}
+	private static Button[] buttons = {
+		new Button("Add Slide", new Rectangle2D.Double(Main.baseRes.getWidth() - 100, 0, 100, 50), true, () -> addSlide()),
+	};
+	private static Button[] contextMenu = {
+		new Button("Add Node", new Rectangle2D.Double(0, 0, 100, 25), false, () ->{
+			if(selected instanceof Node){
+				selected.getBody().add((Node) selected, new Node(180, 100));
+			} else {
+				selected.getBody().add(new Node(180, 100));
+			}
+		}),
+	};
 	
 	public AnimationPanel(){
 		if(slides.size() == 0){
 			addSlide();
+		}
+	}
+	
+	private void setContextMenu(boolean shown){
+		for(int j = 0; j < contextMenu.length; j++){
+			contextMenu[j].setEnabled(shown);
 		}
 	}
 	
@@ -55,6 +69,9 @@ public class AnimationPanel extends DisplayPanel{
 		for(Button i: buttons){
 			i.paint(g);
 		}
+		for(Button i: contextMenu){
+			i.paint(g);
+		}
 	}
 	
 	public static void addSlide(){
@@ -71,24 +88,39 @@ public class AnimationPanel extends DisplayPanel{
 	}
 
 	@Override
-	public void onMousePress(Point2D p, int mouseButton) {
-		if(mouseButton == MouseEvent.BUTTON1){
+	public void onMousePress(Point2D p, int button) {
+		if(button == MouseEvent.BUTTON1){
+			for(int i = 0; i < contextMenu.length; i++){
+				if(buttons[i].mouseDown(p)){
+					setContextMenu(false);
+					return;
+				}
+			}
+			setContextMenu(false);
 			selected = null;
 			selected = slides.get(slideNum).checkSelected(p);
 			if(selected == null){
-				for(Button i: buttons){
-					if(i.mouseDown(p)){
+				for(int i = 0; i < buttons.length; i++){
+					if(buttons[i].mouseDown(p)){
 						break;
 					}
 				}
+			}
+		} else if(button == MouseEvent.BUTTON3){
+			if(selected != null){
+				setContextMenu(true);
+				contextMenu[0].setLocation(p);
 			}
 		}
 	}
 
 	@Override
-	public void onMouseRelease(Point2D p, int mouseButton) {
+	public void onMouseRelease(Point2D p, int button) {
 		//selected = null;
 		for(Button i: buttons){
+			i.mouseUp();
+		}
+		for(Button i: contextMenu){
 			i.mouseUp();
 		}
 	}

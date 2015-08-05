@@ -3,11 +3,12 @@ package nodes.bodies;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import nodes.util.AngleMath;
+
 public class BoundTree extends Body {
 	public BoundTree(Node base) {
 		super(base);
 		this.base = base;
-		base.updateBody(this);
 	}
 
 	Node base;
@@ -39,14 +40,38 @@ public class BoundTree extends Body {
 	}
 
 	@Override
-	protected boolean lockedAngle() {
-		return true;
+	public void add(Node parent, Node node) {
+		node.connectParent(parent);
 	}
 
 	@Override
-	protected boolean lockedLength() {
-		return true;
+	protected void updateNode(Point2D p, Node n) {
+		if(n.parentLoc == null){
+			//If a node has no parents, it is free. Same for humans...
+			n.location.setLocation(p);
+			updateLine(0, n);
+		}else{
+			double delta = n.angle;
+			n.angle = AngleMath.getAngle(n.parentLoc, p);
+			n.location.setLocation(AngleMath.getLocation(n.parentLoc, n.angle, n.length));
+			//location = (AngleMath.getLocation(parentLoc, angle, length));
+			updateLine(delta - n.angle, n);
+		}
 	}
-	
+	private void updateLine(double delta, Node n){
+		for(Node i: n.childNodes){
+			//i.angle += (i.lockedAngle? delta : 0);
+			i.angle -= delta;
+			i.location.setLocation(AngleMath.getLocation(n.location, i.angle, i.length));	
+		}
+		for(Node i: n.childNodes){
+			updateLine(delta, i);
+		}
+	}
+
+	@Override
+	public void add(Node arg0) {
+		arg0.connectParent(base);
+	}
 	
 }

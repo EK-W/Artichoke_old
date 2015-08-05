@@ -41,8 +41,8 @@ public abstract class DisplayPanel extends JPanel{
 	protected abstract void paint(Graphics2D g);
 	
 	public abstract String[] getDebugInfo();
-	public abstract void onMousePress(Point2D e, int mouseButton);
-	public abstract void onMouseRelease(Point2D e, int mouseButton);
-	public abstract void onMouseMove(Point2D e, boolean pressed);
+	public abstract void onMousePress(Point2D p, int button);
+	public abstract void onMouseRelease(Point2D p, int button);
+	public abstract void onMouseMove(Point2D p, boolean pressed);
 	public abstract void onKeyPress(KeyEvent e);
 }

@@ -7,13 +7,16 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
+import javax.swing.SwingUtilities;
+
 import running.Main;
 import running.input.console.Console;
 
 public class InputHandler implements MouseMotionListener, MouseListener, KeyListener{
 	//These variables exist for "debugging" purposes only
 	private static Point2D mouseLoc = new Point2D.Double();
-	private static boolean mouseDown = false;
+	private static boolean leftMouse = false;
+	private static boolean rightMouse = false;
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -80,7 +83,8 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 	public void mousePressed(MouseEvent e) {
 		mouseLoc.setLocation((e.getX()-Main.xOffset/2)/Main.paintScale,(e.getY()-Main.yOffset/2)/Main.paintScale);
 		Main.panel.onMousePress(mouseLoc, e.getButton());
-		mouseDown = true;
+		if(SwingUtilities.isLeftMouseButton(e))leftMouse = true;
+		if(SwingUtilities.isRightMouseButton(e))rightMouse = true;
 		Main.panel.repaint();
 	}
 	
@@ -88,14 +92,15 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 	public void mouseReleased(MouseEvent e) {
 		mouseLoc.setLocation((e.getX()-Main.xOffset/2)/Main.paintScale,(e.getY()-Main.yOffset/2)/Main.paintScale);
 		Main.panel.onMouseRelease(mouseLoc, e.getButton());
-		mouseDown = false;
+		if(SwingUtilities.isLeftMouseButton(e))leftMouse = false;
+		if(SwingUtilities.isRightMouseButton(e))rightMouse = false;
 		Main.panel.repaint();
 	}
 
 	public static String[] getDebugInfo() {
 		return new String[]{
 			("Mouse location: X: " + mouseLoc.getX() + " Y: " + mouseLoc.getY()),
-			("Mouse is " + (mouseDown? "down" : "up") + ".")
+			("Mouse buttons down: " + (leftMouse? "left " : "") + (rightMouse? "right " : ""))
 		};
 	}
 

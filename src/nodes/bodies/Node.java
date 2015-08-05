@@ -15,7 +15,7 @@ import nodes.util.AngleMath;
 public class Node implements Selectable {
 	
 	private static final double RADIUS = 7;
-	private Point2D location;
+	protected Point2D location;
 	private static final Color[] colors = {
 		new Color(255, 207, 51),
 		new Color(154, 0, 196),
@@ -25,10 +25,10 @@ public class Node implements Selectable {
 	private float lineThickness = 1;
 	public static final boolean SNAP_ANGLE = true;
 	private Color lineColor = new Color(0, 0, 0);
-	private ArrayList<Node> childNodes = new ArrayList<Node>();
-	private Point2D parentLoc;
-	private double angle = 180;
-	private double length = 25;
+	protected ArrayList<Node> childNodes = new ArrayList<Node>();
+	protected Point2D parentLoc;
+	protected double angle = 180;
+	protected double length = 25;
 	private Body body;
 	
 	
@@ -45,7 +45,7 @@ public class Node implements Selectable {
 		this.lineColor = lineColor;
 		return this;
 	}
-	public Node connectParent(Node parent){
+	protected Node connectParent(Node parent){
 		if(parent.location == null) throw new NullPointerException("attempted to connect a child to a node with a null location");
 		parent.childNodes.add(this);
 		body = parent.body;
@@ -100,23 +100,7 @@ public class Node implements Selectable {
 	
 	@Override
 	public void updateAsSelected(Point2D p) {
-		if(parentLoc == null){
-			//If a node has no parents, it is free. Same for humans...
-			location.setLocation(p);
-			updateLine(0);
-		}else{
-			double delta = angle;
-			angle = AngleMath.getAngle(parentLoc, p);
-			if(!body.lockedLength()){
-				length = parentLoc.distance(p);
-			}
-			if(SNAP_ANGLE){
-				snapAngle();
-			}
-			location.setLocation(AngleMath.getLocation(parentLoc, angle, length));
-			//location = (AngleMath.getLocation(parentLoc, angle, length));
-			updateLine(delta - angle);
-		}
+		body.updateNode(p, this);
 	}
 	private void snapAngle() {
 //		int snapDistance = 10;
@@ -127,16 +111,7 @@ public class Node implements Selectable {
 //		}
 	}
 
-	private void updateLine(double delta){
-		for(Node i: childNodes){
-			//i.angle += (i.lockedAngle? delta : 0);
-			i.angle -= (body.lockedAngle()? delta : 0);
-			i.location.setLocation(AngleMath.getLocation(location, i.angle, i.length));	
-		}
-		for(Node i: childNodes){
-			i.updateLine(delta);
-		}
-	}
+	
 
 	@Override
 	public Selectable checkSelected(Point2D p) {
@@ -160,7 +135,8 @@ public class Node implements Selectable {
 			"Selected: " + toString(),
 			"Selected angle: " + angle,
 			"Selected length: " + length,
-			"Selected parentLoc: " + (parentLoc == null? "null" : parentLoc.toString()),
+			"Selected location: X: " + location.getX() + " Y: " + location.getY(),
+			"Selected parentLoc: " + (parentLoc == null? "null" : "X: " + parentLoc.getX() + " Y: " + parentLoc.getY()),
 		};
 	}
 	
@@ -186,10 +162,11 @@ public class Node implements Selectable {
 	public Body getBody(){
 		return body;
 	}
-	protected void updateBody(Body body){
+	protected Node updateBody(Body body){
 		this.body = body;
 		for(Node i: childNodes){
 			i.updateBody(body);
 		}
+		return this;
 	}
 }

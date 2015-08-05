@@ -33,7 +33,7 @@ public class DebugStats {
 				GifSequenceWriter.writeGif(100);
 			}
 		});
-		CommandReader.addCommand("addPerson", (Scanner sc) -> readPerson(sc));
+		CommandReader.addCommand("addPreset", (Scanner sc) -> readPreset(sc));
 		CommandReader.addCommand("removeBody", (Scanner sc) -> AnimationPanel.removeSelectedBody());
 	}
 
@@ -49,17 +49,35 @@ public class DebugStats {
 		yLoc=25;
 		xLoc = 5;
 	}
-	private static void readPerson(Scanner sc) {
-		int x = (int) (Main.baseRes.getWidth()/2);
-		int y = (int) (Main.baseRes.getHeight()/2);
-		double scale = 1;
-		if(sc.hasNextDouble())
-			scale = sc.nextDouble();
-		if(sc.hasNextInt())
-			x = sc.nextInt();
-		if(sc.hasNextInt())
-			y = sc.nextInt();
-		AnimationPanel.addBody(BodyBuilder.makePerson(new Point2D.Double(x, y), scale));
+	private static void readPreset(Scanner sc) {
+		if(!sc.hasNext()) return;
+		String type = sc.next();
+		if(type.equalsIgnoreCase("person")){
+			int x = (int) (Main.baseRes.getWidth()/2);
+			int y = (int) (Main.baseRes.getHeight()/2);
+			double scale = 1;
+			if(sc.hasNextDouble())
+				scale = sc.nextDouble();
+			if(sc.hasNextInt())
+				x = sc.nextInt();
+			if(sc.hasNextInt())
+				y = sc.nextInt();
+			AnimationPanel.addBody(BodyBuilder.makePerson(new Point2D.Double(x, y), scale));
+		} else if(type.equalsIgnoreCase("polygon")){
+			int x = (int) (Main.baseRes.getWidth()/2);
+			int y = (int) (Main.baseRes.getHeight()/2);
+			int amt = 5;
+			double length = 75;
+			if(sc.hasNextInt())
+				amt = sc.nextInt();
+			if(sc.hasNextDouble())
+				length = sc.nextDouble();
+			if(sc.hasNextInt())
+				x = sc.nextInt();
+			if(sc.hasNextInt())
+				y = sc.nextInt();
+			AnimationPanel.addBody(BodyBuilder.makePolygon(new Point2D.Double(x, y), length, amt));
+		}
 	}
 	private static void paintInputInfo(Graphics2D g){
 		String[] temp = InputHandler.getDebugInfo();
