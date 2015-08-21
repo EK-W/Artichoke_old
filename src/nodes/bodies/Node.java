@@ -15,20 +15,19 @@ import nodes.util.AngleMath;
 public class Node implements Selectable {
 	
 	private static final double RADIUS = 7;
-	protected Point2D location;
+	public Point2D location;
 	private static final Color[] colors = {
 		new Color(255, 207, 51),
 		new Color(154, 0, 196),
 		new Color(255, 94, 94),
 		new Color(158, 249, 255)
 	};
-	private float lineThickness = 1;
-	public static final boolean SNAP_ANGLE = true;
-	private Color lineColor = new Color(0, 0, 0);
+	public float lineThickness = 1;
+	public Color lineColor = new Color(0, 0, 0);
 	protected ArrayList<Node> childNodes = new ArrayList<Node>();
 	protected Point2D parentLoc;
-	protected double angle = 180;
-	protected double length = 25;
+	public double angle = 180;
+	public double length = 25;
 	private Body body;
 	
 	
@@ -97,21 +96,25 @@ public class Node implements Selectable {
 			i.paintLine(g);
 		}
 	}
-	
+	public void update(){
+		if(parentLoc == null) return;
+		location.setLocation(AngleMath.getLocation(parentLoc, angle, length));
+	}
 	@Override
 	public void updateAsSelected(Point2D p) {
 		body.updateNode(p, this);
 	}
-	private void snapAngle() {
-//		int snapDistance = 10;
-//		for(int i = 0; i < 359; i += 45){
-//			if(i - snapDistance < angle && angle < i + snapDistance){
-//				angle = i - 180;
-//			}
-//		}
+	protected boolean contains(Node n) {
+		if(n == this){
+			return true;
+		}
+		for(Node i: childNodes){
+			if(i.contains(n)){
+				return true;
+			}
+		}
+		return false;
 	}
-
-	
 
 	@Override
 	public Selectable checkSelected(Point2D p) {

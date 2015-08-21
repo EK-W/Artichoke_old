@@ -3,6 +3,8 @@ package running.displayPanels;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -10,13 +12,16 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.swing.SwingUtilities;
 
 import running.Main;
-import running.input.Button;
-import nodes.bodies.Body;
+import running.input.console.Console;
+import running.input.gui.Button;
+import running.input.gui.InputBar;
+import running.input.gui.PopupMenu;
 import nodes.bodies.Node;
+import nodes.bodies.Body;
 import nodes.bodies.Selectable;
+import nodes.util.BodyBuilder;
 
 public class AnimationPanel extends DisplayPanel{
 	/**
@@ -28,28 +33,43 @@ public class AnimationPanel extends DisplayPanel{
 	//ArrayList because it will be referenced often. It will also be added to often so maybe this is a bad idea...
 	private static ArrayList<Slide> slides = new ArrayList<Slide>();
 	private static int slideNum = 0;
-	private static Button[] buttons = {
-		new Button("Add Slide", new Rectangle2D.Double(Main.baseRes.getWidth() - 100, 0, 100, 50), true, () -> addSlide()),
-	};
-	private static Button[] contextMenu = {
-		new Button("Add Node", new Rectangle2D.Double(0, 0, 100, 25), false, () ->{
-			if(selected instanceof Node){
-				selected.getBody().add((Node) selected, new Node(180, 100));
-			} else {
-				selected.getBody().add(new Node(180, 100));
-			}
-		}),
-	};
+	private static Point2D lastMouse = new Point2D.Double(0, 0);
+//	private static Button[] buttons = {
+//		new Button(new Rectangle(Main.baseRes.width - 100, 0, 100, 100), new File("assets/AddSlide.png"), 
+//				(String str) -> addSlide()),
+//	};
+//	private static Button[] contextMenu = {
+//		new Button(new Rectangle(0, 0, 100, 25), new File("assets/AddNode.png"), (String str) ->{
+//			if(selected instanceof Node){
+//				selected.getBody().add((Node) selected, new Node(new Point2D.Double(lastMouse.getX(), lastMouse.getY())));
+//			} else {
+//				selected.getBody().add(new Node(180, 100));
+//			}
+//		}),
+//	};
+	
+//	private InputBar console = new InputBar("Console: ", new Rectangle(0, Main.baseRes.height - 35, Main.baseRes.width, 35), 999, 
+//			InputBar.ALPHANUMERIC, (String str) -> Console.sendCommand(str));
+	private PopupMenu selectedContextMenu = new PopupMenu(
+			new Button("Add Node", new Rectangle(0, 0, 150, 25), (String str) ->{
+				if(selected instanceof Node){
+					selected.getBody().add((Node) selected, new Node(new Point2D.Double(lastMouse.getX(), lastMouse.getY())));
+				} else {
+					selected.getBody().add(new Node(180, 100));
+				}
+			}),
+			new Button("Delete Body", new Rectangle(0, 0, 150, 25), (String str) -> {
+				removeSelectedBody();
+			})	
+	);
+	
+	private PopupMenu contextMenu = new PopupMenu(
+			new InputBar("Add person with scale: ", new Rectangle(0, 0, 200, 25), 2, InputBar.FLOATS, (String str) -> BodyBuilder.makePerson(lastMouse, Float.valueOf(str)))
+	);
 	
 	public AnimationPanel(){
 		if(slides.size() == 0){
 			addSlide();
-		}
-	}
-	
-	private void setContextMenu(boolean shown){
-		for(int j = 0; j < contextMenu.length; j++){
-			contextMenu[j].setEnabled(shown);
 		}
 	}
 	
@@ -66,12 +86,7 @@ public class AnimationPanel extends DisplayPanel{
 			g.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g.draw(selected.getShape());
 		}
-		for(Button i: buttons){
-			i.paint(g);
-		}
-		for(Button i: contextMenu){
-			i.paint(g);
-		}
+		selectedContextMenu.paint(g);
 	}
 	
 	public static void addSlide(){
@@ -88,45 +103,31 @@ public class AnimationPanel extends DisplayPanel{
 	}
 
 	@Override
-	public void onMousePress(Point2D p, int button) {
+	public void onMousePress(Point p, int button) {
+		lastMouse.setLocation(p);
 		if(button == MouseEvent.BUTTON1){
-			for(int i = 0; i < contextMenu.length; i++){
-				if(buttons[i].mouseDown(p)){
-					setContextMenu(false);
-					return;
-				}
+			if(selectedContextMenu.checkClick(p)){
+				return;
 			}
-			setContextMenu(false);
+			selectedContextMenu.close();
 			selected = null;
 			selected = slides.get(slideNum).checkSelected(p);
-			if(selected == null){
-				for(int i = 0; i < buttons.length; i++){
-					if(buttons[i].mouseDown(p)){
-						break;
-					}
-				}
-			}
 		} else if(button == MouseEvent.BUTTON3){
-			if(selected != null){
-				setContextMenu(true);
-				contextMenu[0].setLocation(p);
+			if(selected == null){
+				
+			} else {
+				selectedContextMenu.open(p);
 			}
 		}
 	}
 
 	@Override
-	public void onMouseRelease(Point2D p, int button) {
-		//selected = null;
-		for(Button i: buttons){
-			i.mouseUp();
-		}
-		for(Button i: contextMenu){
-			i.mouseUp();
-		}
+	public void onMouseRelease(Point p, int button) {
+		
 	}
 
 	@Override
-	public void onMouseMove(Point2D p, boolean pressed) {
+	public void onMouseMove(Point p, boolean pressed) {
 		if(pressed && selected != null){
 			selected.updateAsSelected(p);
 		}
@@ -134,6 +135,10 @@ public class AnimationPanel extends DisplayPanel{
 
 	@Override
 	public void onKeyPress(KeyEvent e) {
+		if(InputBar.getOpenBar() != null){	
+			InputBar.sendKeyEvent(e);
+			return;
+		} 
 		if(e.getKeyCode()==KeyEvent.VK_LEFT && slideNum > 0){
 			slideNum--;
 			selected = null;

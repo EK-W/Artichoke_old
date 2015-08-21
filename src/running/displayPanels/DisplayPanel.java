@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -35,14 +36,14 @@ public abstract class DisplayPanel extends JPanel{
 		g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC));
 		g2.addRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));
 		paint(g2);
-		Console.paint(g2);
+		Console.paintStats(g2);
 	}
 	
 	protected abstract void paint(Graphics2D g);
 	
 	public abstract String[] getDebugInfo();
-	public abstract void onMousePress(Point2D p, int button);
-	public abstract void onMouseRelease(Point2D p, int button);
-	public abstract void onMouseMove(Point2D p, boolean pressed);
+	public abstract void onMousePress(Point p, int button);
+	public abstract void onMouseRelease(Point p, int button);
+	public abstract void onMouseMove(Point p, boolean pressed);
 	public abstract void onKeyPress(KeyEvent e);
 }

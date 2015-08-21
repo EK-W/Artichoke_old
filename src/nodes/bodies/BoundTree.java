@@ -41,6 +41,7 @@ public class BoundTree extends Body {
 
 	@Override
 	public void add(Node parent, Node node) {
+		if(!base.contains(parent)) throw new IllegalArgumentException();
 		node.connectParent(parent);
 	}
 
@@ -53,7 +54,7 @@ public class BoundTree extends Body {
 		}else{
 			double delta = n.angle;
 			n.angle = AngleMath.getAngle(n.parentLoc, p);
-			n.location.setLocation(AngleMath.getLocation(n.parentLoc, n.angle, n.length));
+			n.update();
 			//location = (AngleMath.getLocation(parentLoc, angle, length));
 			updateLine(delta - n.angle, n);
 		}
@@ -62,13 +63,12 @@ public class BoundTree extends Body {
 		for(Node i: n.childNodes){
 			//i.angle += (i.lockedAngle? delta : 0);
 			i.angle -= delta;
-			i.location.setLocation(AngleMath.getLocation(n.location, i.angle, i.length));	
+			i.update();
 		}
 		for(Node i: n.childNodes){
 			updateLine(delta, i);
 		}
 	}
-
 	@Override
 	public void add(Node arg0) {
 		arg0.connectParent(base);

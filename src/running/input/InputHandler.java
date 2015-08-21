@@ -1,5 +1,6 @@
 package running.input;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -14,7 +15,7 @@ import running.input.console.Console;
 
 public class InputHandler implements MouseMotionListener, MouseListener, KeyListener{
 	//These variables exist for "debugging" purposes only
-	private static Point2D mouseLoc = new Point2D.Double();
+	private static Point mouseLoc = new Point();
 	private static boolean leftMouse = false;
 	private static boolean rightMouse = false;
 	
@@ -38,16 +39,7 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 			System.out.println("Quit key pressed, quitting.");
 			System.exit(0);
 		}
-		if(Console.commandInputOpen){
-			Console.keyInput(e);
-		} else if(e.getKeyCode()==KeyEvent.VK_ENTER){
-			Console.commandInputOpen=true;
-		} else if(e.getKeyCode()==KeyEvent.VK_SLASH){
-			Console.commandInputOpen=true;
-			Console.sendChar('/');
-		} else {
-			Main.panel.onKeyPress(e);
-		}
+		Main.panel.onKeyPress(e);
 		Main.panel.repaint();
 	}
 	

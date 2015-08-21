@@ -34,10 +34,12 @@ public class BodyBuilder {
 		ret.add(rightThigh, rightShin);
 		ret.add(leftShin, leftFoot);
 		ret.add(rightShin, rightFoot);
-		ret.add(torso, leftShoulder);
-		ret.add(torso, rightShoulder);
-		ret.add(leftShoulder, leftBicep);
-		ret.add(rightShoulder, rightBicep);
+//		ret.add(torso, leftShoulder);
+//		ret.add(torso, rightShoulder);
+//		ret.add(leftShoulder, leftBicep);
+//		ret.add(rightShoulder, rightBicep);
+		ret.add(torso, leftBicep);
+		ret.add(torso, rightBicep);
 		ret.add(leftBicep, leftForearm);
 		ret.add(rightBicep, rightForearm);
 		ret.add(torso, neck);
